@@ -86,6 +86,13 @@ button {
   font-weight: 800;
 }
 
+.primary-btn:disabled,
+.ghost-btn:disabled,
+.vote-row button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
 .primary-btn {
   background: linear-gradient(145deg, #ff2d75, #7c3aed);
   font-size: 18px;
