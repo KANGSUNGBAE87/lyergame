@@ -1,2 +1,7 @@
 .superpowers/
 .claude/settings.local.json
+node_modules/
+dist/
+.ait/
+coverage/
+*.log
