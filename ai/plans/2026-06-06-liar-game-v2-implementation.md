@@ -23,7 +23,7 @@
 | `src/logic/pickWord.js` | 카테고리/난이도 기반 단어 추출 (순수) |
 | `src/logic/assignRoles.js` | 라이어 배정 (순수) |
 | `src/logic/scoring.js` | 점수·승패 판정 (순수) |
-| `src/store/gameStore.js` | 게임 전역 상태 (React context + reducer) |
+| `src/store/gameStore.jsx` | 게임 전역 상태 (React context + reducer) |
 | `src/core/storage.js` | localStorage 영속 계층 (seam) |
 | `src/core/haptic.js` | 진동 추상화 |
 | `src/records/recordsRepository.js`, `localRecords.js` | 전적 저장 인터페이스 + 로컬 구현 |
@@ -315,7 +315,7 @@ git commit -m "feat: add storage persistence layer (seam)"
 
 **난이도 기준 (설계 §8):** d=1 쉬움(일상 단어), d=2 보통(설명 한 단계 필요), d=3 어려움(유사어 많거나 덜 흔함).
 
-- [ ] **Step 1: words.js 작성 — 기존 `legacy/index.html`의 WORDS 20개 카테고리를 `{ w, d }` 형태로 변환**
+- [ ] **Step 1: words.js 작성 — 기존 `legacy/index.html`의 WORDS 20개 카테고리 853개 단어를 `{ w, d }` 형태로 변환**
 
 각 카테고리 배열의 모든 단어에 난이도 `d`를 부여한다. 기준은 위 설계 §8. 구조 예:
 
@@ -325,14 +325,15 @@ export const WORDS = {
   "음식": [
     { w: "김치", d: 1 }, { w: "라면", d: 1 }, { w: "김밥", d: 1 },
     { w: "탕수육", d: 2 }, { w: "잡채", d: 2 }, { w: "수제비", d: 2 },
-    { w: "보쌈", d: 2 }, { w: "순대", d: 2 }, { w: "수육", d: 3 }, /* ... */
+    { w: "보쌈", d: 2 }, { w: "순대", d: 2 }, { w: "수육", d: 3 }
   ],
-  // ... 나머지 19개 카테고리 동일 방식
+  // 나머지 19개 카테고리도 legacy WORDS의 모든 단어를 빠짐없이 포함
 };
 export const CATEGORIES = Object.keys(WORDS);
+export const WORD_COUNT = Object.values(WORDS).reduce((sum, words) => sum + words.length, 0);
 ```
 
-작업 규칙: `legacy/index.html`의 각 단어를 빠짐없이 옮기되, 흔한 일상어=1, 약간 설명 필요=2, 유사어 많음/희귀=3으로 분류. 한 카테고리에 세 등급이 고루 분포하도록.
+작업 규칙: `legacy/index.html`의 각 단어를 빠짐없이 옮기되, 흔한 일상어=1, 약간 설명 필요=2, 유사어 많음/희귀=3으로 분류. `WORD_COUNT`가 853인지 테스트로 검증한다.
 
 - [ ] **Step 2: 실패하는 테스트 작성**
 
@@ -727,14 +728,14 @@ git commit -m "feat: add haptic abstraction (Apps in Toss + vibrate fallback)"
 ## Task 7: gameStore (게임 전역 상태)
 
 **Files:**
-- Create: `src/store/gameStore.js`
+- Create: `src/store/gameStore.jsx`
 
 React Context + useReducer로 게임 상태와 화면 단계를 관리. 화면 전환은 `phase` 상태로 표현.
 
 - [ ] **Step 1: gameStore 구현**
 
 ```jsx
-// src/store/gameStore.js
+// src/store/gameStore.jsx
 import React, { createContext, useContext, useReducer } from 'react';
 import { pickWord } from '../logic/pickWord.js';
 import { assignRoles } from '../logic/assignRoles.js';
@@ -754,6 +755,7 @@ const initialState = {
   liarIndices: [], category: '', word: '',
   revealed: [],        // 카드 확인 여부
   votedOutIndices: [], reversalSuccess: false,
+  perRound: [],
   lastDelta: [],
   prevFrom: 'setup',
 };
@@ -834,7 +836,7 @@ export { PHASES };
 
 ```jsx
 // src/App.jsx
-import { GameProvider, useGame } from './store/gameStore.js';
+import { GameProvider, useGame } from './store/gameStore.jsx';
 
 function Router() {
   const { state } = useGame();
@@ -852,7 +854,7 @@ Run: `npm run dev:web` — 화면에 phase: setup 보임, 콘솔 에러 없음
 - [ ] **Step 4: Commit**
 
 ```bash
-git add src/store/gameStore.js src/App.jsx
+git add src/store/gameStore.jsx src/App.jsx
 git commit -m "feat: add game store (context + reducer) with phase routing"
 ```
 
@@ -1512,6 +1514,7 @@ export function buildGameRecord(state) {
     difficulty: state.config.difficulty,
     scores: state.scores,
     winnerIndices: state.scores.map((s, i) => s === max ? i : -1).filter(i => i >= 0),
+    perRound: state.perRound,
   };
 }
 export async function saveGameRecord(state) {
@@ -1570,7 +1573,7 @@ Run: `npm run dev:web` — 전체 라운드 종료 → 최종 화면. 우승자�
 - [ ] **Step 6: Commit**
 
 ```bash
-git add src/screens/FinalScreen.jsx src/App.jsx src/store/gameStore.js
+git add src/screens/FinalScreen.jsx src/App.jsx src/store/gameStore.jsx
 git commit -m "feat: add final screen and persist game record"
 ```
 

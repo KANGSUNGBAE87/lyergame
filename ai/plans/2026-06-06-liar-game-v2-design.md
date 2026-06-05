@@ -2,8 +2,8 @@
 
 - 작성일: 2026-06-06
 - 작성 도구: Superpowers `brainstorming` 스킬 + Visual Companion
-- 상태: 설계 확정 대기 (사용자 검토 단계)
-- 다음 단계: `writing-plans` 스킬로 구현 계획 작성
+- 상태: 구현 전 검토 완료 (Codex 구현 진행)
+- 다음 단계: 보정된 구현 계획에 따라 React + Vite + Apps in Toss 재구축
 
 ---
 
@@ -149,7 +149,7 @@ calcRoundScore({ playerCount, liarIndices, votedOutIndices, reversalSuccess }) �
 ## 8. 단어 데이터 & 난이도
 
 ### 데이터 형태
-기존 20개 카테고리 ~2000개 단어를 유지하되, 각 단어에 난이도를 부여.
+기존 20개 카테고리 853개 단어를 유지하되, 각 단어에 난이도를 부여.
 
 ```js
 // src/data/words.js
@@ -280,3 +280,9 @@ export default defineConfig({
 - 라이어 2명 시 역전·점수 세부 밸런스
 - 역전 객관식 보기 구성 방식(자동 4지선다 vs 수동 판정 우선순위)
 - 앱 메타데이터(이름/색/아이콘) 최종값
+
+## 17. Codex 구현 전 보정
+
+- 실제 기존 `index.html`의 WORDS 데이터는 20개 카테고리, 853개 단어로 확인.
+- 구현은 `src/store/gameStore.jsx`처럼 JSX가 포함된 파일은 `.jsx` 확장자를 사용.
+- 히스토리는 최종 점수뿐 아니라 라운드별 라이어, 제시어, 투표, 역전, 점수 증감(`perRound`)도 저장.

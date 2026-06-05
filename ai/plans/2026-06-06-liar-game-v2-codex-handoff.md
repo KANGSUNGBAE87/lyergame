@@ -9,7 +9,7 @@
 
 ## 입력 문서 (반드시 먼저 읽기)
 1. 설계: `ai/plans/2026-06-06-liar-game-v2-design.md`
-2. 구현 계획(태스크별 코드·테스트·커밋 포함): `ai/plans/2026-06-06-liar-game-v2-implementation.md` ← **이 계획을 Task 0~16 순서대로 그대로 실행**
+2. 구현 계획(태스크별 코드·테스트·커밋 포함): `ai/plans/2026-06-06-liar-game-v2-implementation.md` ← **Codex 보정 사항을 반영해 Task 0~16 순서대로 실행**
 
 ## Scope (IN)
 - React 18 + Vite 6 + `@apps-in-toss/web-framework` + `granite.config.ts` 스캐폴딩
@@ -23,14 +23,15 @@
 
 ## Target Files (계획서에 전체 경로·코드 명시)
 - 설정: `package.json`, `vite.config.js`, `vitest.config.js`, `granite.config.ts`, `index.html`, `test/setup.js`
-- 로직: `src/core/storage.js`, `src/logic/{pickWord,assignRoles,scoring}.js`, `src/data/words.js`, `src/records/*`, `src/auth/authProvider.js`, `src/core/haptic.js`, `src/store/gameStore.js`
+- 로직: `src/core/storage.js`, `src/logic/{pickWord,assignRoles,scoring}.js`, `src/data/words.js`, `src/records/*`, `src/auth/authProvider.js`, `src/core/haptic.js`, `src/store/gameStore.jsx`
 - 화면: `src/screens/*.jsx`, `src/components/*.jsx`, `src/styles/main.css`, `src/main.jsx`, `src/App.jsx`
 
 ## 주의 포인트 (Codex가 판단해야 할 곳)
-1. **단어 난이도 태깅 (Task 2):** `legacy/index.html`의 WORDS 20개 카테고리 ~2000단어를 `{ w, d }`로 변환. d=1 일상어 / d=2 설명 필요 / d=3 유사어 많음·희귀. 각 카테고리에 세 등급 고루 분포. 누락 단어 없게.
+1. **단어 난이도 태깅 (Task 2):** `legacy/index.html`의 WORDS 20개 카테고리 853단어를 `{ w, d }`로 변환. d=1 일상어 / d=2 설명 필요 / d=3 유사어 많음·희귀. 누락 단어 없게 `WORD_COUNT === 853` 테스트 포함.
 2. **참고 패턴:** `/Users/kangsungbae/Documents/뽁뽁이`의 `storage.js`·`haptic.js`·`test/setup.js`·`granite.config.ts` 구조를 차용(NS·appName 등만 라이어게임용으로 변경).
-3. **카드 색상 통일(핵심):** `.peek-card`는 라이어/단어 공통 배경. 빨간 풀스크린 절대 금지.
-4. **React 지원:** Vite에 `@vitejs/plugin-react` 추가, `granite.config.ts`의 build 커맨드는 `vite build` 유지.
+3. **라운드별 기록:** `GameRecord.perRound`에 라이어, 제시어, 투표, 역전 결과, 점수 증감을 저장.
+4. **카드 색상 통일(핵심):** `.peek-card`는 라이어/단어 공통 배경. 빨간 풀스크린 절대 금지.
+5. **React 지원:** Vite에 `@vitejs/plugin-react` 추가, `granite.config.ts`의 build 커맨드는 `vite build` 유지.
 
 ## Tests
 - `npm test` (vitest) — storage / pickWord / assignRoles / scoring / localRecords 전부 PASS 필요.
