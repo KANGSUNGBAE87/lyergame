@@ -37,4 +37,11 @@ describe('i18n messages', () => {
     expect(getMessage('ko', 'setup.liarHint.label')).toBe('카테고리 힌트 보기');
     expect(getMessage('en', 'setup.liarHint.label')).toBe('Show category hint');
   });
+
+  it('keeps dramatic reveal effects visual instead of onomatopoeic text', () => {
+    expect(getMessage('ko', 'result.liarDudung')).toBe('라이어 공개');
+    expect(getMessage('ko', 'reversal.caught')).toBe('{players} 라이어의 마지막 기회');
+    expect(getMessage('ko', 'result.liarDudung')).not.toContain('두둥');
+    expect(getMessage('ko', 'reversal.caught')).not.toContain('두둥');
+  });
 });

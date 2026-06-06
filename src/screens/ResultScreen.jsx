@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import LiarMascot from '../components/LiarMascot.jsx';
+import ResultSplash from '../components/ResultSplash.jsx';
 import RoundHighlightRow from '../components/RoundHighlightRow.jsx';
 import Scoreboard from '../components/Scoreboard.jsx';
 import { useI18n } from '../i18n/I18nProvider.jsx';
@@ -58,7 +59,7 @@ export default function ResultScreen() {
   return (
     <div className="screen result">
       <p className="eyebrow">{t('result.round', { round: state.round })}</p>
-      <p className="result-tada">{t('result.countdown.tada')}</p>
+      <ResultSplash label={t('result.countdown.revealed')} />
       <h2 className="section-title">{state.lastLiarWon ? t('result.liarWin') : t('result.citizenWin')}</h2>
       <div className="reveal-panel">
         <div className="result-fact-row vote-first">
