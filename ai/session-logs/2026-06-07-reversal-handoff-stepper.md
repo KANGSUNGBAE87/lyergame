@@ -52,6 +52,12 @@ Codex
 - Existing unrelated changes in `AGENTS.md` and `CLAUDE.md` were left untouched.
 - Visual polish can still be tuned after user review on device-sized screens.
 
+## Follow-Up Fix
+
+- The old `3,2,1` result countdown still appeared when the vote missed every liar.
+- Removed the remaining result countdown path so `투표 집계` always opens the round result immediately.
+- Verified the missed-liar browser flow: voting for a citizen opened `3라운드 결과` immediately with no countdown text or countdown number.
+
 ## Knowledge Promotion
 
 - No cross-project durable rule was added. The local session log is sufficient for this feature decision.

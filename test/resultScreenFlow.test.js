@@ -9,10 +9,10 @@ describe('result screen flow', () => {
     })).toBe(true);
   });
 
-  it('keeps the result countdown when no liar was caught by the vote', () => {
+  it('also skips the result countdown when no liar was caught by the vote', () => {
     expect(shouldSkipResultCountdown({
       votedOutIndices: [0, 1],
       liarIndices: [2],
-    })).toBe(false);
+    })).toBe(true);
   });
 });

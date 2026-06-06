@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import LiarMascot from '../components/LiarMascot.jsx';
 import ResultSplash from '../components/ResultSplash.jsx';
 import RoundHighlightRow from '../components/RoundHighlightRow.jsx';
@@ -18,15 +17,13 @@ function formatVoteItems(indices = [], voteCounts = [], playerNames = [], t) {
   })).join(' · ');
 }
 
-export function shouldSkipResultCountdown(state) {
-  return (state.votedOutIndices ?? []).some(index => (state.liarIndices ?? []).includes(index));
+export function shouldSkipResultCountdown() {
+  return true;
 }
 
 export default function ResultScreen() {
   const { state, dispatch } = useGame();
   const { t, categoryLabel } = useI18n();
-  const skipCountdown = shouldSkipResultCountdown(state);
-  const [countdown, setCountdown] = useState(skipCountdown ? 0 : 3);
   const isLastRound = state.round >= state.config.totalRounds;
   const lastRound = state.perRound[state.perRound.length - 1];
   const highlights = lastRound?.highlights ?? {};
@@ -36,30 +33,9 @@ export default function ResultScreen() {
   const voteCaughtLiar = state.votedOutIndices.some(index => state.liarIndices.includes(index));
   const mostSuspicious = highlights.mostSuspicious;
   const unfairCitizen = highlights.unfairCitizen;
-  const showSummary = countdown <= 0;
   const buttonLabel = isLastRound
     ? t('result.final')
     : t('result.nextRound', { round: state.round + 1, total: state.config.totalRounds });
-
-  useEffect(() => {
-    if (skipCountdown || showSummary) return undefined;
-    const timer = window.setTimeout(() => {
-      setCountdown(value => value - 1);
-    }, 720);
-    return () => window.clearTimeout(timer);
-  }, [skipCountdown, showSummary, countdown]);
-
-  if (!showSummary) {
-    return (
-      <div className="screen result result-countdown">
-        <p className="eyebrow">{t('result.round', { round: state.round })}</p>
-        <div className="countdown-stage" aria-live="polite">
-          <span className="countdown-label">{t('result.countdown.ready')}</span>
-          <strong className="countdown-number">{countdown}</strong>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="screen result">
