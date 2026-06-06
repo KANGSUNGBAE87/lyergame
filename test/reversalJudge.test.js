@@ -26,6 +26,8 @@ describe('ReversalJudge', () => {
     expect(html).toContain('카테고리: 음식');
     expect(html).toContain('맞혔어요');
     expect(html).toContain('틀렸어요');
+    expect(html).toContain('reversal-reveal');
+    expect(html).toContain('liar-mascot');
     expect(html).not.toContain('김치');
     expect(html).not.toContain('choice-grid');
     expect(html).toContain('3번 · 4표');

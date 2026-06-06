@@ -1,4 +1,5 @@
 import React from 'react';
+import LiarMascot from './LiarMascot.jsx';
 
 export default function ReversalJudge({
   title,
@@ -25,7 +26,12 @@ export default function ReversalJudge({
           </div>
         ) : null}
         {verdictText ? <p className="reversal-verdict">{verdictText}</p> : null}
-        <p className="reversal-caught">{caughtText}</p>
+        <div className="reversal-reveal">
+          <div className="reversal-mascot-ring">
+            <LiarMascot className="liar-mascot reversal-mascot" />
+          </div>
+          <p className="reversal-caught">{caughtText}</p>
+        </div>
         <p className="reversal-instruction">{instruction}</p>
         <p className="reversal-citizen">{citizenInstruction}</p>
         {categoryText ? <p className="reversal-category">{categoryText}</p> : null}

@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import LiarMascot from '../components/LiarMascot.jsx';
+import RoundHighlightRow from '../components/RoundHighlightRow.jsx';
 import Scoreboard from '../components/Scoreboard.jsx';
 import { useI18n } from '../i18n/I18nProvider.jsx';
 import { playerNameWithNumber } from '../logic/players.js';
@@ -71,6 +73,9 @@ export default function ResultScreen() {
           <b>{judgmentCandidates}</b>
         </div>
         <div className="liar-dudung">
+          <div className="liar-dudung-art">
+            <LiarMascot className="liar-mascot result-mascot" />
+          </div>
           <span>{t('result.liarDudung')}</span>
           <b>{liars}</b>
         </div>
@@ -88,34 +93,39 @@ export default function ResultScreen() {
 
       <div className="highlight-list">
         {mostSuspicious?.votes > 0 ? (
-          <div className="highlight-row">
-            <span>{t('result.highlight.suspicious')}</span>
-            <b>{formatPlayers(mostSuspicious.indices, state.config.playerNames)} · {t('result.highlight.votes', { count: mostSuspicious.votes })}</b>
-          </div>
+          <RoundHighlightRow
+            type="suspicious"
+            label={t('result.highlight.suspicious')}
+            value={`${formatPlayers(mostSuspicious.indices, state.config.playerNames)} · ${t('result.highlight.votes', { count: mostSuspicious.votes })}`}
+          />
         ) : null}
         {unfairCitizen?.votes > 0 ? (
-          <div className="highlight-row">
-            <span>{t('result.highlight.unfair')}</span>
-            <b>{formatPlayers(unfairCitizen.indices, state.config.playerNames)}</b>
-          </div>
+          <RoundHighlightRow
+            type="unfair"
+            label={t('result.highlight.unfair')}
+            value={formatPlayers(unfairCitizen.indices, state.config.playerNames)}
+          />
         ) : null}
         {highlights.hiddenLiars?.length ? (
-          <div className="highlight-row">
-            <span>{t('result.highlight.hiddenLiar')}</span>
-            <b>{formatPlayers(highlights.hiddenLiars, state.config.playerNames)}</b>
-          </div>
+          <RoundHighlightRow
+            type="hidden"
+            label={t('result.highlight.hiddenLiar')}
+            value={formatPlayers(highlights.hiddenLiars, state.config.playerNames)}
+          />
         ) : null}
         {highlights.reversalLiars?.length ? (
-          <div className="highlight-row">
-            <span>{t('result.highlight.reversal')}</span>
-            <b>{formatPlayers(highlights.reversalLiars, state.config.playerNames)}</b>
-          </div>
+          <RoundHighlightRow
+            type="reversal"
+            label={t('result.highlight.reversal')}
+            value={formatPlayers(highlights.reversalLiars, state.config.playerNames)}
+          />
         ) : null}
         {highlights.chaos ? (
-          <div className="highlight-row">
-            <span>{t('result.highlight.chaos')}</span>
-            <b>{formatPlayers(state.votedOutIndices, state.config.playerNames)}</b>
-          </div>
+          <RoundHighlightRow
+            type="chaos"
+            label={t('result.highlight.chaos')}
+            value={formatPlayers(state.votedOutIndices, state.config.playerNames)}
+          />
         ) : null}
       </div>
       <Scoreboard scores={state.scores} delta={state.lastDelta} liarIndices={state.liarIndices} playerNames={state.config.playerNames} />
