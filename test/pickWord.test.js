@@ -6,7 +6,12 @@ describe('word data', () => {
   it('keeps all legacy words across 20 categories', () => {
     expect(CATEGORIES).toHaveLength(20);
     expect(WORD_COUNT).toBe(853);
-    expect(Object.values(WORDS).every(words => words.every(item => item.w && [1, 2, 3].includes(item.d)))).toBe(true);
+    expect(Object.values(WORDS).every(words => words.every(item => item.ko && item.en && [1, 2, 3].includes(item.d)))).toBe(true);
+  });
+
+  it('keeps Korean and English word text for each entry', () => {
+    const kimchi = WORDS['음식'].find(item => item.ko === '김치');
+    expect(kimchi).toMatchObject({ ko: '김치', en: 'Kimchi', d: 1 });
   });
 });
 
@@ -16,6 +21,15 @@ describe('pickWord', () => {
     expect(CATEGORIES).toContain(result.category);
     expect(typeof result.word).toBe('string');
     expect(result.word.length).toBeGreaterThan(0);
+    expect(result.words.ko).toBeTruthy();
+    expect(result.words.en).toBeTruthy();
+  });
+
+  it('returns the display word for the requested locale', () => {
+    for (let i = 0; i < 30; i++) {
+      const result = pickWord({ categories: ['음식'], difficulty: 1, locale: 'en' });
+      expect(result.word).toBe(result.words.en);
+    }
   });
 
   it('only picks from selected categories', () => {

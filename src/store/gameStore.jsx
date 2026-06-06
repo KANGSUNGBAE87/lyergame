@@ -25,6 +25,7 @@ const initialState = {
   liarIndices: [],
   category: '',
   word: '',
+  words: null,
   revealed: [],
   votedOutIndices: [],
   reversalSuccess: false,
@@ -35,15 +36,17 @@ const initialState = {
 
 function startRound(config) {
   const liarIndices = assignRoles(config.playerCount, config.liarCount);
-  const { category, word } = pickWord({
+  const { category, word, words } = pickWord({
     categories: config.categories,
     difficulty: config.difficulty,
+    locale: config.locale,
   });
 
   return {
     liarIndices,
     category,
     word,
+    words,
     revealed: new Array(config.playerCount).fill(false),
     votedOutIndices: [],
     reversalSuccess: false,
@@ -58,6 +61,7 @@ function roundRecord(state, perPlayerDelta, liarWon) {
     liarIndices: state.liarIndices,
     category: state.category,
     word: state.word,
+    words: state.words,
     votedOutIndices: state.votedOutIndices,
     reversalSuccess: state.reversalSuccess,
     deltas: perPlayerDelta,

@@ -1,4 +1,4 @@
-import { CATEGORIES, WORDS } from '../data/words.js';
+import { CATEGORIES, getWordText, WORDS } from '../data/words.js';
 
 function randomItem(items) {
   return items[Math.floor(Math.random() * items.length)];
@@ -22,7 +22,11 @@ export function pickWord(options = {}) {
   const chosen = randomItem(pool);
   return {
     category,
-    word: chosen.w,
+    word: getWordText(chosen, options.locale),
+    words: {
+      ko: chosen.ko,
+      en: chosen.en,
+    },
     difficulty: chosen.d,
   };
 }

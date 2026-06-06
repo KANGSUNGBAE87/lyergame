@@ -10,7 +10,7 @@
 - Setup screen game guide and option descriptions.
 - Round options expanded to `1R`, `3R`, `5R`.
 - Current game screens moved to translation keys where practical.
-- Category labels translated in the UI while the current word pack remains Korean.
+- Category labels and the word pack are available in Korean and English.
 - Web stub providers for auth, payments, and ads.
 - Platform service factory for `web`, `apps-in-toss`, and `google-play` targets.
 
@@ -31,7 +31,7 @@ Future platform implementations should plug into `createPlatformServices(target)
 - Google Play Billing.
 - AdMob or Apps in Toss ad SDK.
 - Backend receipt verification and entitlement sync.
-- English word pack or per-word translations for the 853 Korean words.
+- Native-speaker copy QA for the first-pass English word translations.
 
 ## Verification Plan
 

@@ -13,7 +13,7 @@
 
 - 실제 Toss/Google SDK 연동은 아직 붙이지 않고 `web`, `apps-in-toss`, `google-play` 대상의 provider stub을 만든다.
 - 한국어 UI를 기본값으로 유지하고 영어 UI 선택을 제공한다.
-- 단어팩은 이번 배치에서 한국어 853개를 유지한다. 영어 단어팩은 후속 작업으로 둔다.
+- 단어팩은 후속 배치에서 한국어/영어 병렬 구조로 분리했다. 영어 번역 품질 검토는 별도 QA로 둔다.
 - 결제 상품은 우선 `premium_pack` ID를 non-consumable 상품 후보로 정의한다.
 
 ## Files Changed
@@ -49,7 +49,7 @@
 
 ## Remaining Risks
 
-- Current English mode translates UI and category labels, but not the 853 Korean words.
+- English word translations are first-pass static copy and need native-speaker/copy QA before store release.
 - Real login/payment/ad SDKs still need platform-specific implementations and store credentials.
 - Paid entitlements must be verified by a backend before enabling real purchases.
 

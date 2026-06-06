@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { DIFFICULTY_OPTIONS, ROUND_OPTIONS, TIMER_OPTIONS } from '../config/gameOptions.js';
+import { DIFFICULTY_OPTIONS, MAX_PLAYERS, MIN_PLAYERS, ROUND_OPTIONS, TIMER_OPTIONS } from '../config/gameOptions.js';
 import { CATEGORIES } from '../data/words.js';
 import { useI18n } from '../i18n/I18nProvider.jsx';
 import { LOCALES } from '../i18n/messages.js';
@@ -82,8 +82,8 @@ export default function SetupScreen() {
         <p className="field-help">{t('setup.playerCount.help')}</p>
         <input
           type="range"
-          min="3"
-          max="10"
+          min={MIN_PLAYERS}
+          max={MAX_PLAYERS}
           value={config.playerCount}
           onChange={event => setPlayerCount(Number(event.target.value))}
         />
@@ -155,7 +155,7 @@ export default function SetupScreen() {
       </details>
 
       <div className="setup-actions">
-        <button className="primary-btn" type="button" onClick={() => dispatch({ type: 'START', config })}>{t('setup.start')}</button>
+        <button className="primary-btn" type="button" onClick={() => dispatch({ type: 'START', config: { ...config, locale } })}>{t('setup.start')}</button>
         <button className="ghost-btn" type="button" onClick={() => dispatch({ type: 'GO', phase: 'history' })}>{t('setup.history')}</button>
       </div>
     </div>
