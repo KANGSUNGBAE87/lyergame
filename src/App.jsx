@@ -6,6 +6,7 @@ import ResultScreen from './screens/ResultScreen.jsx';
 import ReversalScreen from './screens/ReversalScreen.jsx';
 import SetupScreen from './screens/SetupScreen.jsx';
 import VoteScreen from './screens/VoteScreen.jsx';
+import { I18nProvider } from './i18n/I18nProvider.jsx';
 import { GameProvider, useGame } from './store/gameStore.jsx';
 
 function Router() {
@@ -35,8 +36,10 @@ function Router() {
 
 export default function App() {
   return (
-    <GameProvider>
-      <Router />
-    </GameProvider>
+    <I18nProvider>
+      <GameProvider>
+        <Router />
+      </GameProvider>
+    </I18nProvider>
   );
 }

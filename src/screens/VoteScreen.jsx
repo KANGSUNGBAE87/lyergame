@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { useI18n } from '../i18n/I18nProvider.jsx';
 import { getVotedOutIndices, totalVotes } from '../logic/voting.js';
 import { useGame } from '../store/gameStore.jsx';
 
 export default function VoteScreen() {
   const { state, dispatch } = useGame();
+  const { t } = useI18n();
   const [votes, setVotes] = useState(new Array(state.config.playerCount).fill(0));
   const voteTotal = totalVotes(votes);
   const canAddVote = voteTotal < state.config.playerCount;
@@ -22,18 +24,19 @@ export default function VoteScreen() {
 
   return (
     <div className="screen vote">
-      <h2 className="section-title">라이어 투표</h2>
+      <h2 className="section-title">{t('vote.title')}</h2>
+      <p className="hint">{t('vote.help')}</p>
       <div className="vote-grid">
         {votes.map((value, index) => (
           <div className="vote-row" key={index}>
-            <span className="vote-num">{index + 1}번</span>
-            <button type="button" disabled={value === 0} onClick={() => changeVote(index, -1)} aria-label={`${index + 1}번 표 빼기`}>-</button>
+            <span className="vote-num">{t('common.playerNumber', { num: index + 1 })}</span>
+            <button type="button" disabled={value === 0} onClick={() => changeVote(index, -1)} aria-label={t('vote.minus', { num: index + 1 })}>-</button>
             <span className="vote-cnt">{value}</span>
-            <button type="button" disabled={!canAddVote} onClick={() => changeVote(index, 1)} aria-label={`${index + 1}번 표 더하기`}>+</button>
+            <button type="button" disabled={!canAddVote} onClick={() => changeVote(index, 1)} aria-label={t('vote.plus', { num: index + 1 })}>+</button>
           </div>
         ))}
       </div>
-      <button className="primary-btn" type="button" disabled={voteTotal === 0} onClick={submit}>투표 확정</button>
+      <button className="primary-btn" type="button" disabled={voteTotal === 0} onClick={submit}>{t('vote.submit')}</button>
     </div>
   );
 }

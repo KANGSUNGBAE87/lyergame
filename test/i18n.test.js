@@ -1,0 +1,23 @@
+import { describe, expect, it } from 'vitest';
+import { DEFAULT_LOCALE, getMessage, interpolate, isSupportedLocale } from '../src/i18n/messages.js';
+
+describe('i18n messages', () => {
+  it('uses Korean as the default locale', () => {
+    expect(DEFAULT_LOCALE).toBe('ko');
+  });
+
+  it('supports Korean and English locales', () => {
+    expect(isSupportedLocale('ko')).toBe(true);
+    expect(isSupportedLocale('en')).toBe(true);
+    expect(isSupportedLocale('jp')).toBe(false);
+  });
+
+  it('falls back to Korean when an English message is missing', () => {
+    expect(getMessage('en', 'app.title')).toBe('Liar Game');
+    expect(getMessage('en', 'missing.key')).toBe('missing.key');
+  });
+
+  it('interpolates named values in messages', () => {
+    expect(interpolate('{count} players · {rounds}R', { count: 6, rounds: 3 })).toBe('6 players · 3R');
+  });
+});

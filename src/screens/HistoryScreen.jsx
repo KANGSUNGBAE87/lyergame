@@ -1,18 +1,14 @@
 import { useEffect, useState } from 'react';
+import { useI18n } from '../i18n/I18nProvider.jsx';
 import { recordsRepository } from '../records/recordsRepository.js';
 import { useGame } from '../store/gameStore.jsx';
 
-const difficultyLabel = {
-  0: '전체',
-  1: '쉬움',
-  2: '보통',
-  3: '어려움',
-};
-
 export default function HistoryScreen() {
   const { state, dispatch } = useGame();
+  const { locale, t } = useI18n();
   const [games, setGames] = useState(null);
   const backPhase = state.prevFrom && state.prevFrom !== 'history' ? state.prevFrom : 'setup';
+  const dateLocale = locale === 'ko' ? 'ko-KR' : 'en-US';
 
   useEffect(() => {
     recordsRepository.listGames().then(setGames);
@@ -20,23 +16,28 @@ export default function HistoryScreen() {
 
   return (
     <div className="screen history">
-      <h2 className="section-title">지난 기록</h2>
-      {games === null ? <p className="hint">불러오는 중</p> : null}
-      {games?.length === 0 ? <p className="hint">아직 기록이 없습니다.</p> : null}
+      <h2 className="section-title">{t('history.title')}</h2>
+      {games === null ? <p className="hint">{t('common.loading')}</p> : null}
+      {games?.length === 0 ? <p className="hint">{t('history.empty')}</p> : null}
       {games?.length ? (
         <div className="hist-list">
           {games.map((game, index) => (
             <div className="hist-row" key={`${game.date}-${index}`}>
-              <div className="hist-date">{new Date(game.date).toLocaleString('ko-KR')}</div>
+              <div className="hist-date">{new Date(game.date).toLocaleString(dateLocale)}</div>
               <div className="hist-meta">
-                {game.playerCount}명 · {game.rounds}R · {difficultyLabel[game.difficulty] ?? '전체'} · 우승 {game.winnerIndices.map(i => i + 1).join(', ')}번
+                {t('history.meta', {
+                  players: game.playerCount,
+                  rounds: game.rounds,
+                  difficulty: t(`setup.difficulty.${game.difficulty ?? 0}`),
+                  winners: game.winnerIndices.map(i => i + 1).join(', '),
+                })}
               </div>
             </div>
           ))}
         </div>
       ) : null}
-      <div className="login-note">로그인 기반 영구 기록은 다음 버전에서 연결 예정</div>
-      <button className="ghost-btn" type="button" onClick={() => dispatch({ type: 'GO', phase: backPhase })}>돌아가기</button>
+      <div className="login-note">{t('history.loginNote')}</div>
+      <button className="ghost-btn" type="button" onClick={() => dispatch({ type: 'GO', phase: backPhase })}>{t('common.back')}</button>
     </div>
   );
 }

@@ -2,10 +2,12 @@ import { useState } from 'react';
 import Card from '../components/Card.jsx';
 import PeekModal from '../components/PeekModal.jsx';
 import { haptic } from '../core/haptic.js';
+import { useI18n } from '../i18n/I18nProvider.jsx';
 import { useGame } from '../store/gameStore.jsx';
 
 export default function PeekScreen() {
   const { state, dispatch } = useGame();
+  const { t } = useI18n();
   const [peeking, setPeeking] = useState(false);
   const [peekIdx, setPeekIdx] = useState(-1);
   const done = state.revealed.filter(Boolean).length;
@@ -26,8 +28,9 @@ export default function PeekScreen() {
   return (
     <div className="screen game">
       <div className="game-header">
-        <p className="game-title">라운드 {state.round}</p>
-        <p className="progress">{done} / {state.config.playerCount} 확인 완료</p>
+        <p className="game-title">{t('peek.round', { round: state.round })}</p>
+        <p className="progress">{t('peek.progress', { done, count: state.config.playerCount })}</p>
+        <p className="screen-help">{t('peek.help')}</p>
       </div>
       <div className="cards-area">
         {state.revealed.map((used, index) => (

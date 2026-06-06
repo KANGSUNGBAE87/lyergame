@@ -41,3 +41,20 @@ Rules:
 - If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
 - Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
 - After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).
+
+## App Platform Portability
+
+If this project is an app, follow `/Users/kangsungbae/Documents/지식저장소/docs/workflows/app-platform-standard.md`.
+
+Rules:
+- Use Apps in Toss as the default first target unless the user says otherwise.
+- Preserve Google Play Store portability from the first implementation.
+- Keep authentication/login, ads, in-app purchase, storage, analytics, haptics, share, and backend transport behind platform adapters.
+- Do not import Apps in Toss, Google Play Billing, AdMob, Google login, or other platform SDKs directly from product/domain logic.
+- Implement i18n from the first app version: Korean (`ko`) is the default, and English (`en`) must be user-selectable.
+- Route UI copy, LLM prompts, notifications, purchase copy, errors, empty states, and onboarding through the active locale instead of hard-coding user-facing strings.
+- Plan MVP stubs for login, ads, and IAP even when the first release does not enable them.
+- Apps in Toss implementations should use Toss login, Apps in Toss ads, and Apps in Toss IAP.
+- Google Play implementations should use Credential Manager or Play Games Services, AdMob, and Google Play Billing.
+- Verify paid entitlements on a backend. Do not put store secrets, receipt-verification credentials, or LLM API keys in app bundles.
+- Keep a project platform note in `/Users/kangsungbae/Documents/지식저장소/projects/<project-name>/platform.md` when the project becomes an app.

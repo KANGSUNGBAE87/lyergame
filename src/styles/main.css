@@ -148,6 +148,13 @@ button {
   font-weight: 750;
 }
 
+.field-help {
+  color: #93c5fd;
+  font-size: 12px;
+  line-height: 1.45;
+  margin: -2px 0 0;
+}
+
 .field input[type="range"] {
   width: 100%;
   accent-color: #ffbe0b;
@@ -208,6 +215,26 @@ button {
   padding: 12px;
 }
 
+.guide-box {
+  gap: 10px;
+}
+
+.guide-copy,
+.guide-list {
+  color: #dbeafe;
+  font-size: 13px;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.guide-list {
+  padding-left: 20px;
+}
+
+.guide-list li + li {
+  margin-top: 4px;
+}
+
 .cat-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -244,6 +271,14 @@ button {
   color: #ffbe0b;
   font-size: 14px;
   font-weight: 850;
+}
+
+.screen-help {
+  width: min(92%, 420px);
+  margin: 7px auto 0;
+  color: #c7d2fe;
+  font-size: 12px;
+  line-height: 1.45;
 }
 
 .cards-area {

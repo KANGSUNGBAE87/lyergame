@@ -1,3 +1,5 @@
+import { useI18n } from '../i18n/I18nProvider.jsx';
+
 const LIAR_SVG = (
   <svg className="liar-svg" viewBox="0 0 280 260" aria-hidden="true">
     <ellipse cx="140" cy="140" rx="82" ry="86" fill="#ffe0bd" stroke="#c8956d" strokeWidth="3.5" />
@@ -10,18 +12,21 @@ const LIAR_SVG = (
 );
 
 export default function PeekModal({ active, isLiar, category, word, liarHint }) {
+  const { t, categoryLabel } = useI18n();
+  const translatedCategory = categoryLabel(category);
+
   return (
     <div className={'peek-modal' + (active ? ' active' : '')}>
       <div className="peek-card">
         {isLiar ? (
           <>
             {LIAR_SVG}
-            <div className="pc-liar-label">라이어</div>
-            {liarHint ? <div className="pc-category">카테고리: {category}</div> : null}
+            <div className="pc-liar-label">{t('peekModal.liar')}</div>
+            {liarHint ? <div className="pc-category">{t('peekModal.category', { category: translatedCategory })}</div> : null}
           </>
         ) : (
           <>
-            <div className="pc-category">{category}</div>
+            <div className="pc-category">{translatedCategory}</div>
             <div className="pc-word">{word}</div>
           </>
         )}

@@ -1,9 +1,7 @@
-export const authProvider = {
-  async getUser() {
-    return null;
-  },
+import { createPlatformServices } from '../platform/platformServices.js';
 
-  async login() {
-    throw new Error('login not implemented in v2');
-  },
-};
+export const authProvider = createPlatformServices('web').auth;
+
+export function createAuthProvider(target) {
+  return createPlatformServices(target).auth;
+}
