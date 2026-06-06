@@ -1,3 +1,4 @@
+import React from 'react';
 import { useI18n } from '../i18n/I18nProvider.jsx';
 
 const LIAR_SVG = (
@@ -15,8 +16,12 @@ export default function PeekModal({ active, isLiar, category, word, liarHint }) 
   const { t, categoryLabel } = useI18n();
   const translatedCategory = categoryLabel(category);
 
+  if (!active) {
+    return null;
+  }
+
   return (
-    <div className={'peek-modal' + (active ? ' active' : '')}>
+    <div className="peek-modal active">
       <div className="peek-card">
         {isLiar ? (
           <>
