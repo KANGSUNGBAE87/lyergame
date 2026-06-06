@@ -8,6 +8,7 @@ import { useGame } from '../store/gameStore.jsx';
 export default function SetupScreen() {
   const { dispatch } = useGame();
   const { locale, setLocale, t, categoryLabel } = useI18n();
+  const [languageOpen, setLanguageOpen] = useState(false);
   const [config, setConfig] = useState({
     playerCount: 6,
     liarCount: 1,
@@ -30,24 +31,40 @@ export default function SetupScreen() {
       ? prev.categories.filter(item => item !== category)
       : [...prev.categories, category],
   }));
+  const currentLocale = LOCALES.find(item => item.code === locale);
+  const chooseLocale = nextLocale => {
+    setLocale(nextLocale);
+    setLanguageOpen(false);
+  };
 
   return (
     <div className="screen setup">
+      <div className="locale-menu">
+        <button
+          className="locale-trigger"
+          type="button"
+          aria-expanded={languageOpen}
+          onClick={() => setLanguageOpen(open => !open)}
+        >
+          <span>{t('setup.language.trigger')}</span>
+          <b>{currentLocale?.label ?? locale}</b>
+        </button>
+        {languageOpen ? (
+          <div className="locale-popover" role="menu">
+            <div className="locale-popover-title">{t('setup.language.label')}</div>
+            {LOCALES.map(item => (
+              <button key={item.code} type="button" role="menuitemradio" aria-checked={locale === item.code} onClick={() => chooseLocale(item.code)}>
+                <span className="locale-check" aria-hidden="true" />
+                <span>{item.label}</span>
+              </button>
+            ))}
+          </div>
+        ) : null}
+      </div>
+
       <div className="setup-head">
         <h1 className="title">{t('app.title')}</h1>
         <p className="subtitle">{t('app.subtitle')}</p>
-      </div>
-
-      <div className="field">
-        <span>{t('setup.language.label')}</span>
-        <p className="field-help">{t('setup.language.help')}</p>
-        <div className="seg">
-          {LOCALES.map(item => (
-            <button key={item.code} className={locale === item.code ? 'on' : ''} type="button" onClick={() => setLocale(item.code)}>
-              {item.label}
-            </button>
-          ))}
-        </div>
       </div>
 
       <details className="field category-box guide-box" open>

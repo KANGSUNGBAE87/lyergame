@@ -20,4 +20,9 @@ describe('i18n messages', () => {
   it('interpolates named values in messages', () => {
     expect(interpolate('{count} players · {rounds}R', { count: 6, rounds: 3 })).toBe('6 players · 3R');
   });
+
+  it('labels unrestricted difficulty as mixed, not all', () => {
+    expect(getMessage('ko', 'setup.difficulty.0')).toBe('혼합');
+    expect(getMessage('en', 'setup.difficulty.0')).toBe('Mixed');
+  });
 });
