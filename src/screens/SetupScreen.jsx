@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import GuideDialog from '../components/GuideDialog.jsx';
-import { DIFFICULTY_OPTIONS, MAX_PLAYERS, MIN_PLAYERS, ROUND_OPTIONS, TIMER_OPTIONS } from '../config/gameOptions.js';
+import PlayerCountControl from '../components/PlayerCountControl.jsx';
+import { DIFFICULTY_OPTIONS, MAX_PLAYERS, MIN_PLAYERS, PLAYER_PRESETS, ROUND_OPTIONS, TIMER_OPTIONS } from '../config/gameOptions.js';
 import { CATEGORIES } from '../data/words.js';
 import { useI18n } from '../i18n/I18nProvider.jsx';
 import { LOCALES } from '../i18n/messages.js';
@@ -120,17 +121,19 @@ export default function SetupScreen() {
         onClose={() => setGuideOpen(false)}
       />
 
-      <label className="field">
-        <span>{t('setup.playerCount.label', { count: config.playerCount })}</span>
-        <p className="field-help">{t('setup.playerCount.help')}</p>
-        <input
-          type="range"
-          min={MIN_PLAYERS}
-          max={MAX_PLAYERS}
-          value={config.playerCount}
-          onChange={event => setPlayerCount(Number(event.target.value))}
-        />
-      </label>
+      <PlayerCountControl
+        value={config.playerCount}
+        min={MIN_PLAYERS}
+        max={MAX_PLAYERS}
+        presets={PLAYER_PRESETS}
+        label={t('setup.playerCount.label')}
+        help={t('setup.playerCount.help')}
+        valueLabel={t('setup.playerCount.value', { count: config.playerCount })}
+        decreaseLabel={t('setup.playerCount.decrease')}
+        increaseLabel={t('setup.playerCount.increase')}
+        presetLabel={value => t('setup.playerCount.preset', { count: value })}
+        onChange={setPlayerCount}
+      />
 
       <div className="field">
         <span>{t('setup.liarCount.label')}</span>
