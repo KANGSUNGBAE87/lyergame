@@ -1,6 +1,7 @@
 import { useI18n } from '../i18n/I18nProvider.jsx';
+import { playerLabel } from '../logic/players.js';
 
-export default function Scoreboard({ scores, delta = [], liarIndices = [] }) {
+export default function Scoreboard({ scores, delta = [], liarIndices = [], playerNames = [] }) {
   const { t } = useI18n();
   const ranked = scores
     .map((score, index) => ({ score, index, delta: delta[index] || 0 }))
@@ -10,7 +11,7 @@ export default function Scoreboard({ scores, delta = [], liarIndices = [] }) {
     <div className="scoreboard">
       {ranked.map(({ score, index, delta: change }) => (
         <div className="sb-row" key={index}>
-          <span className="sb-name">{t('common.playerNumber', { num: index + 1 })}{liarIndices.includes(index) ? t('scoreboard.liarSuffix') : ''}</span>
+          <span className="sb-name">{playerLabel(index, playerNames)}{liarIndices.includes(index) ? t('scoreboard.liarSuffix') : ''}</span>
           <span className="sb-score">
             {score}
             {change ? <em className="sb-delta">+{change}</em> : null}

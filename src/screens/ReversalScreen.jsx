@@ -1,12 +1,13 @@
 import ReversalJudge from '../components/ReversalJudge.jsx';
 import { useI18n } from '../i18n/I18nProvider.jsx';
+import { playerNameWithNumber } from '../logic/players.js';
 import { useGame } from '../store/gameStore.jsx';
 
 export default function ReversalScreen() {
   const { state, dispatch } = useGame();
   const { t, categoryLabel } = useI18n();
   const caughtLiars = state.votedOutIndices.filter(index => state.liarIndices.includes(index));
-  const caughtPlayers = caughtLiars.map(index => index + 1).join(', ');
+  const caughtPlayers = caughtLiars.map(index => playerNameWithNumber(index, state.config.playerNames)).join(', ');
   const translatedCategory = categoryLabel(state.category);
   const decide = success => dispatch({ type: 'SET_REVERSAL', success });
 
