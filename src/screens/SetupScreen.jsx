@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import GuideDialog from '../components/GuideDialog.jsx';
 import { DIFFICULTY_OPTIONS, MAX_PLAYERS, MIN_PLAYERS, ROUND_OPTIONS, TIMER_OPTIONS } from '../config/gameOptions.js';
 import { CATEGORIES } from '../data/words.js';
 import { useI18n } from '../i18n/I18nProvider.jsx';
@@ -9,6 +10,7 @@ export default function SetupScreen() {
   const { dispatch } = useGame();
   const { locale, setLocale, t, categoryLabel } = useI18n();
   const [languageOpen, setLanguageOpen] = useState(false);
+  const [guideOpen, setGuideOpen] = useState(false);
   const [config, setConfig] = useState({
     playerCount: 6,
     liarCount: 1,
@@ -36,6 +38,40 @@ export default function SetupScreen() {
     setLocale(nextLocale);
     setLanguageOpen(false);
   };
+  const guideSections = [
+    {
+      title: t('setup.guide.goal.title'),
+      items: [
+        t('setup.guide.goal.citizens'),
+        t('setup.guide.goal.liar'),
+      ],
+    },
+    {
+      title: t('setup.guide.flow.title'),
+      items: [
+        t('setup.guide.flow.setup'),
+        t('setup.guide.flow.peek'),
+        t('setup.guide.flow.clue'),
+        t('setup.guide.flow.vote'),
+      ],
+    },
+    {
+      title: t('setup.guide.tips.title'),
+      items: [
+        t('setup.guide.tips.citizen'),
+        t('setup.guide.tips.liar'),
+        t('setup.guide.tips.group'),
+      ],
+    },
+    {
+      title: t('setup.guide.settings.title'),
+      items: [
+        t('setup.guide.settings.liars'),
+        t('setup.guide.settings.timer'),
+        t('setup.guide.settings.hint'),
+      ],
+    },
+  ];
 
   return (
     <div className="screen setup">
@@ -67,15 +103,22 @@ export default function SetupScreen() {
         <p className="subtitle">{t('app.subtitle')}</p>
       </div>
 
-      <details className="field category-box guide-box" open>
-        <summary>{t('setup.guide.title')}</summary>
+      <section className="field category-box guide-box">
+        <span>{t('setup.guide.title')}</span>
         <p className="guide-copy">{t('setup.guide.copy')}</p>
-        <ol className="guide-list">
-          <li>{t('setup.guide.step1')}</li>
-          <li>{t('setup.guide.step2')}</li>
-          <li>{t('setup.guide.step3')}</li>
-        </ol>
-      </details>
+        <button className="guide-open" type="button" onClick={() => setGuideOpen(true)}>
+          {t('setup.guide.open')}
+        </button>
+      </section>
+
+      <GuideDialog
+        open={guideOpen}
+        title={t('setup.guide.title')}
+        intro={t('setup.guide.intro')}
+        sections={guideSections}
+        closeLabel={t('setup.guide.close')}
+        onClose={() => setGuideOpen(false)}
+      />
 
       <label className="field">
         <span>{t('setup.playerCount.label', { count: config.playerCount })}</span>
