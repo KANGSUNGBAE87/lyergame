@@ -25,4 +25,9 @@ describe('i18n messages', () => {
     expect(getMessage('ko', 'setup.difficulty.0')).toBe('혼합');
     expect(getMessage('en', 'setup.difficulty.0')).toBe('Mixed');
   });
+
+  it('uses game method copy for the guide button', () => {
+    expect(getMessage('ko', 'setup.guide.open')).toBe('게임방법');
+    expect(getMessage('en', 'setup.guide.open')).toBe('How to play');
+  });
 });

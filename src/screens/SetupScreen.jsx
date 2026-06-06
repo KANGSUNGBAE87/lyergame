@@ -162,6 +162,8 @@ export default function SetupScreen() {
         label={t('setup.playerNames.label')}
         summary={t('setup.playerNames.summary')}
         help={t('setup.playerNames.help')}
+        closedLabel={t('setup.playerNames.openLabel')}
+        openLabel={t('setup.playerNames.closeLabel')}
         placeholderLabel={num => t('setup.playerNames.placeholder', { num })}
         clearLabel={t('setup.playerNames.clear')}
         onChange={changePlayerName}
@@ -169,7 +171,7 @@ export default function SetupScreen() {
       />
 
       <div className="setup-actions">
-        <button className="primary-btn wide" type="button" onClick={startGame}>{t('setup.quickStart')}</button>
+        <button className="primary-btn wide start-pulse" type="button" onClick={startGame}>{t('setup.quickStart')}</button>
         <div className="setup-secondary-actions">
           <button className="ghost-btn compact" type="button" onClick={() => setGuideOpen(true)}>
             {t('setup.guide.open')}
@@ -180,8 +182,13 @@ export default function SetupScreen() {
 
       <details className="field advanced-box">
         <summary>
-          <span>{t('setup.advanced.label')}</span>
-          <small>{advancedSummary}</small>
+          <span className="name-summary-main">
+            <span>{t('setup.advanced.label')}</span>
+            <small>{advancedSummary}</small>
+          </span>
+          <span className="name-summary-action" aria-hidden="true">
+            <span className="summary-chevron" />
+          </span>
         </summary>
         <div className="advanced-content">
           <div className="field">
