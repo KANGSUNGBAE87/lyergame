@@ -30,4 +30,11 @@ describe('i18n messages', () => {
     expect(getMessage('ko', 'setup.guide.open')).toBe('게임방법');
     expect(getMessage('en', 'setup.guide.open')).toBe('How to play');
   });
+
+  it('labels advanced settings disclosure and category hint clearly', () => {
+    expect(getMessage('ko', 'setup.advanced.openLabel')).toBe('펼치기');
+    expect(getMessage('ko', 'setup.advanced.closeLabel')).toBe('접기');
+    expect(getMessage('ko', 'setup.liarHint.label')).toBe('카테고리 힌트 보기');
+    expect(getMessage('en', 'setup.liarHint.label')).toBe('Show category hint');
+  });
 });

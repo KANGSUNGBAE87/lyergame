@@ -2,6 +2,9 @@ import React from 'react';
 
 export default function ReversalJudge({
   title,
+  voteResultLabel,
+  voteResultText,
+  verdictText,
   caughtText,
   instruction,
   citizenInstruction,
@@ -15,6 +18,13 @@ export default function ReversalJudge({
     <div className="screen reversal">
       <h2 className="section-title">{title}</h2>
       <div className="reversal-card">
+        {voteResultText ? (
+          <div className="reversal-vote-result">
+            <span>{voteResultLabel}</span>
+            <b>{voteResultText}</b>
+          </div>
+        ) : null}
+        {verdictText ? <p className="reversal-verdict">{verdictText}</p> : null}
         <p className="reversal-caught">{caughtText}</p>
         <p className="reversal-instruction">{instruction}</p>
         <p className="reversal-citizen">{citizenInstruction}</p>

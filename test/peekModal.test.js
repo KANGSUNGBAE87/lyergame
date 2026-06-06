@@ -34,4 +34,14 @@ describe('PeekModal', () => {
     expect(html).toContain('디저트');
     expect(html).toContain('요거트');
   });
+
+  it('shows category to a liar only when category hint is enabled', () => {
+    const withHint = renderPeekModal({ isLiar: true, liarHint: true });
+    const withoutHint = renderPeekModal({ isLiar: true, liarHint: false });
+
+    expect(withHint).toContain('카테고리: 디저트');
+    expect(withHint).not.toContain('요거트');
+    expect(withoutHint).not.toContain('카테고리: 디저트');
+    expect(withoutHint).not.toContain('요거트');
+  });
 });

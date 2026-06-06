@@ -187,6 +187,8 @@ export default function SetupScreen() {
             <small>{advancedSummary}</small>
           </span>
           <span className="name-summary-action" aria-hidden="true">
+            <span className="name-toggle-label closed">{t('setup.advanced.openLabel')}</span>
+            <span className="name-toggle-label open">{t('setup.advanced.closeLabel')}</span>
             <span className="summary-chevron" />
           </span>
         </summary>
