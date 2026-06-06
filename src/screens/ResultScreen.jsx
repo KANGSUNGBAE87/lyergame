@@ -18,10 +18,15 @@ function formatVoteItems(indices = [], voteCounts = [], playerNames = [], t) {
   })).join(' · ');
 }
 
+export function shouldSkipResultCountdown(state) {
+  return (state.votedOutIndices ?? []).some(index => (state.liarIndices ?? []).includes(index));
+}
+
 export default function ResultScreen() {
   const { state, dispatch } = useGame();
   const { t, categoryLabel } = useI18n();
-  const [countdown, setCountdown] = useState(3);
+  const skipCountdown = shouldSkipResultCountdown(state);
+  const [countdown, setCountdown] = useState(skipCountdown ? 0 : 3);
   const isLastRound = state.round >= state.config.totalRounds;
   const lastRound = state.perRound[state.perRound.length - 1];
   const highlights = lastRound?.highlights ?? {};
@@ -37,12 +42,12 @@ export default function ResultScreen() {
     : t('result.nextRound', { round: state.round + 1, total: state.config.totalRounds });
 
   useEffect(() => {
-    if (showSummary) return undefined;
+    if (skipCountdown || showSummary) return undefined;
     const timer = window.setTimeout(() => {
       setCountdown(value => value - 1);
     }, 720);
     return () => window.clearTimeout(timer);
-  }, [showSummary, countdown]);
+  }, [skipCountdown, showSummary, countdown]);
 
   if (!showSummary) {
     return (

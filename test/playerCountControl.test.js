@@ -23,6 +23,8 @@ describe('PlayerCountControl', () => {
     expect(html).toContain('6명');
     expect(html).toContain('aria-label="인원수 줄이기"');
     expect(html).toContain('aria-label="인원수 늘리기"');
+    expect(html).toContain('stepper-action decrease');
+    expect(html).toContain('stepper-action increase');
     expect(html).toContain('3명으로 설정');
     expect(html).toContain('12명으로 설정');
     expect(html).not.toContain('type="range"');

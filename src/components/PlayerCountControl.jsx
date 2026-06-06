@@ -26,11 +26,11 @@ export default function PlayerCountControl({
         <small>{help}</small>
       </div>
       <div className="player-stepper" aria-label={label}>
-        <button type="button" aria-label={decreaseLabel} disabled={value <= min} onClick={() => setValue(value - 1)}>
+        <button className="stepper-action decrease" type="button" aria-label={decreaseLabel} disabled={value <= min} onClick={() => setValue(value - 1)}>
           -
         </button>
         <strong>{valueLabel}</strong>
-        <button type="button" aria-label={increaseLabel} disabled={value >= max} onClick={() => setValue(value + 1)}>
+        <button className="stepper-action increase" type="button" aria-label={increaseLabel} disabled={value >= max} onClick={() => setValue(value + 1)}>
           +
         </button>
       </div>

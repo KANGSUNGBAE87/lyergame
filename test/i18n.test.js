@@ -44,4 +44,11 @@ describe('i18n messages', () => {
     expect(getMessage('ko', 'result.liarDudung')).not.toContain('두둥');
     expect(getMessage('ko', 'reversal.caught')).not.toContain('두둥');
   });
+
+  it('has copy for handing the phone to the caught liar before answer reveal', () => {
+    expect(getMessage('ko', 'reversal.handoff.title')).toBe('지목된 라이어에게 넘겨주세요');
+    expect(getMessage('ko', 'reversal.outcome.correctTitle')).toBe('맞습니다!');
+    expect(getMessage('ko', 'reversal.outcome.wrongTitle')).toBe('틀렸습니다!');
+    expect(getMessage('ko', 'reversal.answer.cta')).toBe('정답 확인하기');
+  });
 });
