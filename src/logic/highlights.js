@@ -41,7 +41,7 @@ export function deriveRoundHighlights({
       ? liarIndices.filter(index => normalizedVoteCounts[index] === 0)
       : [],
     reversalLiars: liarWon && reversalSuccess ? liarIndices.filter(index => votedOutIndices.includes(index)) : [],
-    chaos: !caughtLiar,
+    chaos: votedOutIndices.length > 1,
   };
 }
 

@@ -2,23 +2,26 @@ import LiarMascot from '../components/LiarMascot.jsx';
 import ResultSplash from '../components/ResultSplash.jsx';
 import RoundHighlightRow from '../components/RoundHighlightRow.jsx';
 import Scoreboard from '../components/Scoreboard.jsx';
+import VoteResultBars from '../components/VoteResultBars.jsx';
 import { useI18n } from '../i18n/I18nProvider.jsx';
 import { playerNameWithNumber } from '../logic/players.js';
+import { createVoteResultRows } from '../logic/voteResults.js';
 import { useGame } from '../store/gameStore.jsx';
 
 function formatPlayers(indices = [], playerNames = []) {
   return indices.map(index => playerNameWithNumber(index, playerNames)).join(', ');
 }
 
-function formatVoteItems(indices = [], voteCounts = [], playerNames = [], t) {
-  return indices.map(index => t('result.vote.item', {
-    player: playerNameWithNumber(index, playerNames),
-    count: voteCounts[index] ?? 0,
-  })).join(' · ');
-}
-
 export function shouldSkipResultCountdown() {
   return true;
+}
+
+export function shouldShowMostSuspiciousHighlight({ voteCaughtLiar, mostSuspicious }) {
+  return !voteCaughtLiar && (mostSuspicious?.votes ?? 0) > 0;
+}
+
+export function shouldShowMissedStatusBelowTitle({ lastLiarWon, voteCaughtLiar }) {
+  return Boolean(lastLiarWon && !voteCaughtLiar);
 }
 
 export default function ResultScreen() {
@@ -29,7 +32,11 @@ export default function ResultScreen() {
   const highlights = lastRound?.highlights ?? {};
   const liars = formatPlayers(state.liarIndices, state.config.playerNames);
   const judgmentCandidates = formatPlayers(state.votedOutIndices, state.config.playerNames);
-  const voteSummary = formatVoteItems(state.votedOutIndices, state.voteCounts, state.config.playerNames, t);
+  const voteRows = createVoteResultRows({
+    voteCounts: state.voteCounts,
+    playerNames: state.config.playerNames,
+    candidateIndices: state.votedOutIndices,
+  });
   const voteCaughtLiar = state.votedOutIndices.some(index => state.liarIndices.includes(index));
   const mostSuspicious = highlights.mostSuspicious;
   const unfairCitizen = highlights.unfairCitizen;
@@ -42,18 +49,25 @@ export default function ResultScreen() {
       <p className="eyebrow">{t('result.round', { round: state.round })}</p>
       <ResultSplash label={t('result.countdown.revealed')} />
       <h2 className="section-title">{state.lastLiarWon ? t('result.liarWin') : t('result.citizenWin')}</h2>
+      {shouldShowMissedStatusBelowTitle({ lastLiarWon: state.lastLiarWon, voteCaughtLiar }) ? (
+        <p className="result-missed-note">{t('result.vote.missed')}</p>
+      ) : null}
       <div className="reveal-panel">
-        <div className="result-fact-row vote-first">
-          <span>{t('result.vote.label')}</span>
-          <b>{voteSummary}</b>
-        </div>
-        <div className={voteCaughtLiar ? 'result-judgment caught' : 'result-judgment missed'}>
-          {voteCaughtLiar ? t('result.vote.caught') : t('result.vote.missed')}
-        </div>
-        <div className="result-fact-row">
+        <div className="result-fact-row candidate-summary">
           <span>{t('result.vote.candidate')}</span>
           <b>{judgmentCandidates}</b>
         </div>
+        <VoteResultBars
+          label={t('result.vote.label')}
+          rows={voteRows}
+          countLabel={count => t('result.highlight.votes', { count })}
+          candidateLabel={t('result.vote.candidateBadge')}
+        />
+        {voteCaughtLiar ? (
+          <div className="result-judgment caught">
+            {t('result.vote.caught')}
+          </div>
+        ) : null}
         <div className="liar-dudung">
           <div className="liar-dudung-art">
             <LiarMascot className="liar-mascot result-mascot" />
@@ -74,7 +88,7 @@ export default function ResultScreen() {
       </div>
 
       <div className="highlight-list">
-        {mostSuspicious?.votes > 0 ? (
+        {shouldShowMostSuspiciousHighlight({ voteCaughtLiar, mostSuspicious }) ? (
           <RoundHighlightRow
             type="suspicious"
             label={t('result.highlight.suspicious')}

@@ -35,4 +35,31 @@ describe('ReversalJudge', () => {
     expect(html.indexOf('3번 · 4표')).toBeLessThan(html.indexOf('3번이 제시어를 맞히면 역전승'));
     expect(html.indexOf('판정: 라이어 지목 성공')).toBeLessThan(html.indexOf('3번이 제시어를 맞히면 역전승'));
   });
+
+  it('shows structured vote result bars before the liar final chance', () => {
+    const html = renderToStaticMarkup(React.createElement(ReversalJudge, {
+      title: '라이어 지목',
+      voteResultLabel: '투표 결과',
+      voteRows: [
+        { index: 2, player: '3번', count: 4, percent: 100, isCandidate: true },
+        { index: 0, player: '1번', count: 1, percent: 25, isCandidate: false },
+      ],
+      countLabel: count => `${count}표`,
+      candidateLabel: '후보',
+      verdictText: '판정: 라이어 지목 성공',
+      caughtText: '3번이 제시어를 맞히면 역전승',
+      instruction: '지목된 라이어는 제시어를 한 번 말하세요.',
+      citizenInstruction: '시민들은 정답 여부를 판정하세요.',
+      correctLabel: '맞혔어요',
+      wrongLabel: '틀렸어요',
+      onCorrect: () => {},
+      onWrong: () => {},
+    }));
+
+    expect(html).toContain('vote-result-bars compact');
+    expect(html).toContain('vote-result-row candidate');
+    expect(html).toContain('width:100%');
+    expect(html).toContain('width:25%');
+    expect(html.indexOf('투표 결과')).toBeLessThan(html.indexOf('3번이 제시어를 맞히면 역전승'));
+  });
 });

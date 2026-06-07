@@ -3,6 +3,7 @@ import ReversalJudge from '../components/ReversalJudge.jsx';
 import ReversalOutcomeStep from '../components/ReversalOutcomeStep.jsx';
 import { useI18n } from '../i18n/I18nProvider.jsx';
 import { playerNameWithNumber } from '../logic/players.js';
+import { createVoteResultRows } from '../logic/voteResults.js';
 import { useGame } from '../store/gameStore.jsx';
 
 export default function ReversalScreen() {
@@ -11,6 +12,11 @@ export default function ReversalScreen() {
   const [outcome, setOutcome] = useState({ step: 'judge', success: false });
   const caughtLiars = state.votedOutIndices.filter(index => state.liarIndices.includes(index));
   const caughtPlayers = caughtLiars.map(index => playerNameWithNumber(index, state.config.playerNames)).join(', ');
+  const voteRows = createVoteResultRows({
+    voteCounts: state.voteCounts,
+    playerNames: state.config.playerNames,
+    candidateIndices: state.votedOutIndices,
+  });
   const voteResultText = state.votedOutIndices
     .map(index => t('result.vote.item', {
       player: playerNameWithNumber(index, state.config.playerNames),
@@ -64,6 +70,9 @@ export default function ReversalScreen() {
       title={t('reversal.title')}
       voteResultLabel={t('reversal.voteResult')}
       voteResultText={voteResultText}
+      voteRows={voteRows}
+      countLabel={count => t('result.highlight.votes', { count })}
+      candidateLabel={t('result.vote.candidateBadge')}
       verdictText={t('reversal.verdictCaught')}
       caughtText={t('reversal.caught', { players: caughtPlayers })}
       instruction={t('reversal.instruction')}

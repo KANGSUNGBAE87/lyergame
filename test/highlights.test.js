@@ -15,6 +15,19 @@ describe('deriveRoundHighlights', () => {
     expect(highlights.mostSuspicious).toEqual({ indices: [0], votes: 3 });
     expect(highlights.unfairCitizen).toEqual({ indices: [0], votes: 3 });
     expect(highlights.hiddenLiars).toEqual([2]);
+    expect(highlights.chaos).toBe(false);
+  });
+
+  it('marks chaos only when multiple candidates are jointly nominated', () => {
+    const highlights = deriveRoundHighlights({
+      playerCount: 4,
+      liarIndices: [3],
+      votedOutIndices: [0, 1],
+      voteCounts: [2, 2, 1, 0],
+      liarWon: true,
+      reversalSuccess: false,
+    });
+
     expect(highlights.chaos).toBe(true);
   });
 

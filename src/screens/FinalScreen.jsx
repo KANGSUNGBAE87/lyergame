@@ -1,4 +1,9 @@
 import { useEffect, useRef } from 'react';
+import { AD_PLACEMENTS } from '../ads/adPlacements.js';
+import { preloadInterstitial, runAfterInterstitial } from '../ads/adFlow.js';
+import { adsProvider } from '../ads/adsProvider.js';
+import { authProvider } from '../auth/authProvider.js';
+import LoginPrompt from '../components/LoginPrompt.jsx';
 import Scoreboard from '../components/Scoreboard.jsx';
 import { useI18n } from '../i18n/I18nProvider.jsx';
 import { deriveFinalRecap } from '../logic/highlights.js';
@@ -23,6 +28,18 @@ export default function FinalScreen() {
       void saveGameRecord(state);
     }
   }, [state]);
+
+  useEffect(() => {
+    void preloadInterstitial(adsProvider, AD_PLACEMENTS.POST_GAME_INTERSTITIAL);
+  }, []);
+
+  const runPostGameAction = action => {
+    void runAfterInterstitial({
+      ads: adsProvider,
+      placementId: AD_PLACEMENTS.POST_GAME_INTERSTITIAL,
+      action: () => dispatch(action),
+    });
+  };
 
   return (
     <div className="screen final">
@@ -59,8 +76,17 @@ export default function FinalScreen() {
         ) : null}
       </div>
       <Scoreboard scores={state.scores} playerNames={state.config.playerNames} />
-      <button className="primary-btn wide" type="button" onClick={() => dispatch({ type: 'RESTART_SAME' })}>{t('final.sameGame')}</button>
-      <button className="ghost-btn" type="button" onClick={() => dispatch({ type: 'RESET' })}>{t('final.newGame')}</button>
+      <LoginPrompt
+        compact
+        eyebrow={t('auth.final.eyebrow')}
+        title={t('auth.final.title')}
+        body={t('auth.final.body')}
+        ctaLabel={t('auth.login')}
+        statusText={t('auth.notReady')}
+        onLogin={() => authProvider.login()}
+      />
+      <button className="primary-btn wide" type="button" onClick={() => runPostGameAction({ type: 'RESTART_SAME' })}>{t('final.sameGame')}</button>
+      <button className="ghost-btn" type="button" onClick={() => runPostGameAction({ type: 'RESET' })}>{t('final.newGame')}</button>
       <button className="ghost-btn" type="button" onClick={() => dispatch({ type: 'GO', phase: 'history' })}>{t('final.history')}</button>
     </div>
   );

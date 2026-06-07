@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { authProvider } from '../auth/authProvider.js';
 import GuideDialog from '../components/GuideDialog.jsx';
 import PlayerCountControl from '../components/PlayerCountControl.jsx';
 import PlayerNamesEditor from '../components/PlayerNamesEditor.jsx';
@@ -25,6 +26,7 @@ export default function SetupScreen() {
   const { locale, setLocale, t, categoryLabel } = useI18n();
   const [languageOpen, setLanguageOpen] = useState(false);
   const [guideOpen, setGuideOpen] = useState(false);
+  const [accountNotice, setAccountNotice] = useState('');
   const [config, setConfig] = useState(DEFAULT_SETUP_CONFIG);
 
   const set = (key, value) => setConfig(prev => ({ ...prev, [key]: value }));
@@ -68,6 +70,12 @@ export default function SetupScreen() {
       locale,
     },
   });
+  const requestLogin = async () => {
+    const result = await authProvider.login();
+    if (!result?.ok) {
+      setAccountNotice(t('auth.notReady'));
+    }
+  };
   const guideSections = [
     {
       title: t('setup.guide.goal.title'),
@@ -105,33 +113,39 @@ export default function SetupScreen() {
 
   return (
     <div className="screen setup">
-      <div className="locale-menu">
-        <button
-          className="locale-trigger"
-          type="button"
-          aria-expanded={languageOpen}
-          onClick={() => setLanguageOpen(open => !open)}
-        >
-          <span>{t('setup.language.trigger')}</span>
-          <b>{currentLocale?.label ?? locale}</b>
+      <div className="setup-topbar">
+        <button className="account-trigger" type="button" onClick={requestLogin}>
+          {t('auth.account')}
         </button>
-        {languageOpen ? (
-          <div className="locale-popover" role="menu">
-            <div className="locale-popover-title">{t('setup.language.label')}</div>
-            {LOCALES.map(item => (
-              <button key={item.code} type="button" role="menuitemradio" aria-checked={locale === item.code} onClick={() => chooseLocale(item.code)}>
-                <span className="locale-check" aria-hidden="true" />
-                <span>{item.label}</span>
-              </button>
-            ))}
-          </div>
-        ) : null}
+        <div className="locale-menu">
+          <button
+            className="locale-trigger"
+            type="button"
+            aria-expanded={languageOpen}
+            onClick={() => setLanguageOpen(open => !open)}
+          >
+            <span>{t('setup.language.trigger')}</span>
+            <b>{currentLocale?.label ?? locale}</b>
+          </button>
+          {languageOpen ? (
+            <div className="locale-popover" role="menu">
+              <div className="locale-popover-title">{t('setup.language.label')}</div>
+              {LOCALES.map(item => (
+                <button key={item.code} type="button" role="menuitemradio" aria-checked={locale === item.code} onClick={() => chooseLocale(item.code)}>
+                  <span className="locale-check" aria-hidden="true" />
+                  <span>{item.label}</span>
+                </button>
+              ))}
+            </div>
+          ) : null}
+        </div>
       </div>
 
       <div className="setup-head">
         <h1 className="title">{t('app.title')}</h1>
         <p className="subtitle">{t('app.subtitle')}</p>
       </div>
+      {accountNotice ? <p className="account-inline-notice" role="status">{accountNotice}</p> : null}
 
       <GuideDialog
         open={guideOpen}

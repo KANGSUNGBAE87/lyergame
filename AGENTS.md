@@ -27,7 +27,10 @@ Rules:
 - Keep plans and logs concise. Do not paste full chat transcripts or full tool logs unless the raw evidence itself is the artifact being preserved.
 - Keep `ai/` available to project-local Graphify; do not ignore it in `.graphifyignore`.
 - Promote reusable knowledge from these logs to `/Users/kangsungbae/Documents/지식저장소`.
-- Refresh project Graphify only after meaningful source Markdown or code changes, preferably at the end of a work batch. Use `graphify update . --no-cluster` as the routine fallback when no LLM API key is available.
+- Follow `/Users/kangsungbae/Documents/지식저장소/docs/workflows/graph-refresh-policy.md` for graph timing.
+- Refresh project Graphify after new project setup, verified feature completion, finalized important project docs, durable decisions, or handoffs that depend on recent files.
+- Do not refresh project Graphify for ordinary conversation, tiny copy edits, or short unsaved opinions.
+- Use `graphify update . --no-cluster` as the routine structural fallback when a refresh is worthwhile.
 
 ## graphify
 
@@ -40,15 +43,22 @@ Rules:
 - Dirty graphify-out/ files are expected after hooks or incremental updates; dirty graph files are not a reason to skip graphify. Only skip graphify if the task is about stale or incorrect graph output, or the user explicitly says not to use it.
 - If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
 - Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
-- After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).
+- Follow `/Users/kangsungbae/Documents/지식저장소/docs/workflows/graph-refresh-policy.md` for graph refresh timing.
+- Refresh project Graphify after new project setup, verified feature completion, finalized important project docs, durable decisions, or handoffs that depend on recent files.
+- Do not refresh project Graphify for ordinary conversation, tiny copy edits, or short unsaved opinions.
+- Use `graphify update . --no-cluster` as the routine structural fallback when a refresh is worthwhile.
 
 ## App Platform Portability
 
 If this project is an app, follow `/Users/kangsungbae/Documents/지식저장소/docs/workflows/app-platform-standard.md`.
 
+Project-specific release order:
+- `라이어게임` is a game-like app, so use Google Play as the first release target while keeping Apps in Toss support and packaging intact.
+
 Rules:
-- Use Apps in Toss as the default first target unless the user says otherwise.
-- Preserve Google Play Store portability from the first implementation.
+- Keep every app compatible with both Apps in Toss and Google Play from the first implementation unless the user explicitly narrows the target.
+- For game or game-like apps, use Google Play as the first release target while preserving Apps in Toss compatibility.
+- For non-game apps, use Apps in Toss as the first release target while preserving Google Play compatibility.
 - Keep authentication/login, ads, in-app purchase, storage, analytics, haptics, share, and backend transport behind platform adapters.
 - Do not import Apps in Toss, Google Play Billing, AdMob, Google login, or other platform SDKs directly from product/domain logic.
 - Implement i18n from the first app version: Korean (`ko`) is the default, and English (`en`) must be user-selectable.

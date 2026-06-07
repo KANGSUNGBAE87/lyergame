@@ -10,8 +10,24 @@ export default function DiscussScreen() {
   return (
     <div className="screen discuss">
       <h2 className="section-title">{t('discuss.title')}</h2>
-      <p className="hint">{t('discuss.help')}</p>
-      {state.config.timerMin > 0 ? <Timer minutes={state.config.timerMin} onDone={goVote} /> : <p className="hint">{t('discuss.noTimer')}</p>}
+      <div className="discussion-mission-card">
+        <div className="mission-card-head">
+          <span className="mission-badge">{t('discuss.missionBadge')}</span>
+          <span className="mission-rule">{t('discuss.ruleBadge')}</span>
+        </div>
+        <p>
+          <strong>{t('discuss.keyword.noWord')}</strong>{t('discuss.missionLine1')}
+        </p>
+        <p>
+          <strong>{t('discuss.keyword.explain')}</strong>{t('discuss.missionLine2')}
+          <strong>{t('discuss.keyword.findLiar')}</strong>{t('discuss.missionLine3')}
+        </p>
+        {state.config.timerMin > 0 ? (
+          <Timer minutes={state.config.timerMin} onDone={goVote} />
+        ) : (
+          <span className="timer-pill">{t('discuss.noTimer')}</span>
+        )}
+      </div>
       <button className="primary-btn" type="button" onClick={goVote}>{t('discuss.goVote')}</button>
     </div>
   );

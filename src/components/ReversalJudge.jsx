@@ -1,10 +1,14 @@
 import React from 'react';
 import LiarMascot from './LiarMascot.jsx';
+import VoteResultBars from './VoteResultBars.jsx';
 
 export default function ReversalJudge({
   title,
   voteResultLabel,
   voteResultText,
+  voteRows = [],
+  countLabel = count => `${count}`,
+  candidateLabel = '',
   verdictText,
   caughtText,
   instruction,
@@ -19,7 +23,15 @@ export default function ReversalJudge({
     <div className="screen reversal">
       <h2 className="section-title">{title}</h2>
       <div className="reversal-card">
-        {voteResultText ? (
+        {voteRows.length ? (
+          <VoteResultBars
+            label={voteResultLabel}
+            rows={voteRows}
+            countLabel={countLabel}
+            candidateLabel={candidateLabel}
+            compact
+          />
+        ) : voteResultText ? (
           <div className="reversal-vote-result">
             <span>{voteResultLabel}</span>
             <b>{voteResultText}</b>

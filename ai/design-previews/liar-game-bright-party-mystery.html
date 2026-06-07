@@ -1,0 +1,1078 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>라이어게임 Bright Party Mystery Design Board</title>
+  <style>
+    :root {
+      --main: #e11d48;
+      --sub: #0f766e;
+      --accent: #f59e0b;
+      --party: #f97316;
+      --bg: #172033;
+      --bg-deep: #111827;
+      --surface: #fff7ed;
+      --surface-strong: #ffffff;
+      --ink: #111827;
+      --muted: #64748b;
+      --line: rgba(17, 24, 39, 0.1);
+      --shadow: 0 18px 50px rgba(17, 24, 39, 0.18);
+      --button-shadow: 0 14px 28px rgba(225, 29, 72, 0.28), inset 0 -4px 0 rgba(17, 24, 39, 0.16);
+      --button-depth-main: #9f1239;
+      --button-depth-sub: #115e59;
+      --button-depth-light: #d6d3d1;
+      --button-top-gloss: rgba(255, 255, 255, 0.36);
+      --radius-card: 18px;
+      --radius-control: 14px;
+      --screen-w: 390px;
+      --screen-h: 844px;
+      font-family: Inter, Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: #0b1120;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 8% 6%, rgba(245, 158, 11, 0.26), transparent 28%),
+        radial-gradient(circle at 92% 0%, rgba(15, 118, 110, 0.28), transparent 30%),
+        linear-gradient(135deg, #0b1120, #172033 48%, #111827);
+    }
+
+    .board {
+      width: min(100%, 1840px);
+      margin: 0 auto;
+      padding: 48px;
+    }
+
+    .board-title {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 24px;
+      align-items: end;
+      margin-bottom: 28px;
+      color: white;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: #5eead4;
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    .board-title .eyebrow {
+      color: #5eead4;
+    }
+
+    .phone .eyebrow {
+      color: var(--sub);
+    }
+
+    .phone.dark .eyebrow {
+      color: #5eead4;
+    }
+
+    h1, h2, h3, p {
+      margin: 0;
+    }
+
+    h1 {
+      font-size: 44px;
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+
+    .board-title p:last-child {
+      max-width: 620px;
+      margin-top: 12px;
+      color: #dbeafe;
+      font-size: 17px;
+      line-height: 1.65;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      height: 38px;
+      padding: 0 14px;
+      border-radius: 999px;
+      color: #fff7ed;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      font-weight: 900;
+    }
+
+    .panel {
+      border-radius: 28px;
+      padding: 28px;
+      background: rgba(255, 247, 237, 0.98);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .style-grid {
+      display: grid;
+      grid-template-columns: 560px 340px 380px 420px 420px;
+      gap: 18px;
+      margin-bottom: 34px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+    }
+
+    .section-title {
+      margin-bottom: 18px;
+      font-size: 22px;
+      font-weight: 950;
+    }
+
+    .swatches {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .swatch {
+      min-height: 110px;
+      border-radius: 16px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      color: white;
+      font-weight: 950;
+      box-shadow: inset 0 -26px 44px rgba(17, 24, 39, 0.2);
+    }
+
+    .swatch small {
+      display: block;
+      margin-top: 5px;
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .type-stack {
+      display: grid;
+      gap: 14px;
+    }
+
+    .type-sample {
+      padding: 16px;
+      border-radius: 16px;
+      background: white;
+      border: 1px solid var(--line);
+    }
+
+    .display {
+      font-size: 38px;
+      line-height: 1.04;
+      font-weight: 950;
+    }
+
+    .headline {
+      font-size: 26px;
+      line-height: 1.12;
+      font-weight: 950;
+    }
+
+    .body-copy {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.55;
+      font-weight: 750;
+    }
+
+    .component-stack {
+      display: grid;
+      gap: 12px;
+    }
+
+    .btn {
+      position: relative;
+      min-height: 54px;
+      border: 0;
+      border-radius: var(--radius-control);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 20px;
+      font-size: 16px;
+      font-weight: 950;
+      letter-spacing: 0;
+      overflow: hidden;
+      transform: translateY(-3px) perspective(520px) rotateX(4deg);
+      text-shadow: 0 1px 0 rgba(17, 24, 39, 0.18);
+    }
+
+    .btn::after,
+    .primary-cta::after,
+    .preset::after,
+    .accordion-row::after {
+      content: "";
+      position: absolute;
+      inset: 7px 12px auto;
+      height: 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.26);
+      pointer-events: none;
+    }
+
+    .btn-primary {
+      color: white;
+      background: var(--sub);
+      box-shadow:
+        0 8px 0 var(--button-depth-sub),
+        0 16px 28px rgba(15, 118, 110, 0.24),
+        inset 0 2px 0 var(--button-top-gloss),
+        inset 0 -4px 0 rgba(17, 24, 39, 0.12);
+    }
+
+    .btn-secondary {
+      color: var(--ink);
+      background: white;
+      border: 1px solid var(--line);
+      text-shadow: none;
+      box-shadow:
+        0 7px 0 var(--button-depth-light),
+        0 14px 22px rgba(17, 24, 39, 0.1),
+        inset 0 2px 0 rgba(255, 255, 255, 0.9);
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 0 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 950;
+    }
+
+    .badge-main {
+      color: white;
+      background: var(--main);
+    }
+
+    .badge-sub {
+      color: white;
+      background: var(--sub);
+    }
+
+    .badge-soft {
+      color: #9a3412;
+      background: #ffedd5;
+      border: 1px solid #fed7aa;
+    }
+
+    .mini-card {
+      padding: 16px;
+      border-radius: var(--radius-card);
+      background: white;
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 24px rgba(17, 24, 39, 0.08);
+    }
+
+    .motion-card {
+      min-height: 210px;
+      border-radius: 24px;
+      padding: 18px;
+      color: white;
+      background:
+        radial-gradient(circle at 26% 16%, rgba(255, 255, 255, 0.22), transparent 22%),
+        linear-gradient(135deg, #172033, #0f766e 58%, #e11d48);
+      box-shadow: 0 22px 48px rgba(17, 24, 39, 0.24);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transform: perspective(760px) rotateX(6deg) rotateY(-8deg);
+      display: grid;
+      align-content: space-between;
+    }
+
+    .motion-card strong {
+      font-size: 24px;
+      line-height: 1.12;
+      font-weight: 950;
+    }
+
+    .motion-card p {
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 13px;
+      line-height: 1.55;
+      font-weight: 800;
+    }
+
+    .button-demo-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .button-demo-row .primary-cta {
+      min-width: 140px;
+      min-height: 58px;
+    }
+
+    .token-box {
+      padding: 18px;
+      border-radius: 18px;
+      color: #e5e7eb;
+      background: #111827;
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 12px;
+      line-height: 1.72;
+      white-space: pre-wrap;
+    }
+
+    .screens {
+      display: grid;
+      grid-template-columns: repeat(4, var(--screen-w));
+      gap: 26px;
+      align-items: start;
+      overflow-x: auto;
+      padding-bottom: 10px;
+    }
+
+    .phone-wrap {
+      display: grid;
+      gap: 12px;
+    }
+
+    .phone-title {
+      color: white;
+      font-size: 17px;
+      font-weight: 950;
+    }
+
+    .phone-note {
+      color: #cbd5e1;
+      font-size: 13px;
+      line-height: 1.5;
+      font-weight: 760;
+    }
+
+    .phone {
+      position: relative;
+      width: var(--screen-w);
+      height: var(--screen-h);
+      overflow: hidden;
+      border-radius: 34px;
+      background:
+        radial-gradient(circle at 18% 0%, rgba(245, 158, 11, 0.28), transparent 34%),
+        radial-gradient(circle at 95% 20%, rgba(15, 118, 110, 0.22), transparent 36%),
+        linear-gradient(180deg, #fff7ed 0%, #f8fafc 56%, #e0f2fe 100%);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.28);
+      border: 10px solid #0f172a;
+    }
+
+    .phone.dark {
+      background:
+        radial-gradient(circle at 18% 0%, rgba(249, 115, 22, 0.36), transparent 32%),
+        radial-gradient(circle at 95% 16%, rgba(20, 184, 166, 0.32), transparent 34%),
+        linear-gradient(180deg, var(--bg), var(--bg-deep));
+    }
+
+    .phone-inner {
+      position: absolute;
+      inset: 0;
+      padding: 28px 22px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      min-height: 34px;
+    }
+
+    .lang {
+      min-height: 30px;
+      padding: 0 10px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.82);
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 950;
+      border: 1px solid var(--line);
+    }
+
+    .ghost-link {
+      color: #0f766e;
+      font-weight: 950;
+      font-size: 13px;
+    }
+
+    .hero-lockup {
+      display: grid;
+      gap: 9px;
+      margin-top: 10px;
+    }
+
+    .hero-title {
+      font-size: 44px;
+      line-height: 1.02;
+      font-weight: 950;
+      letter-spacing: 0;
+      color: var(--ink);
+    }
+
+    .hero-sub {
+      color: #475569;
+      font-size: 15px;
+      line-height: 1.55;
+      font-weight: 800;
+    }
+
+    .player-card {
+      margin-top: 4px;
+      padding: 18px;
+      border-radius: 22px;
+      background: white;
+      border: 1px solid var(--line);
+      box-shadow: 0 14px 34px rgba(17, 24, 39, 0.1);
+    }
+
+    .field-label {
+      color: #475569;
+      font-size: 13px;
+      font-weight: 950;
+    }
+
+    .stepper {
+      display: grid;
+      grid-template-columns: 68px 1fr 68px;
+      gap: 14px;
+      align-items: center;
+      margin-top: 12px;
+    }
+
+    .round-button {
+      position: relative;
+      height: 62px;
+      border-radius: 21px;
+      background:
+        radial-gradient(circle at 28% 18%, rgba(255, 255, 255, 0.72), transparent 22%),
+        var(--main);
+      color: white;
+      display: grid;
+      place-items: center;
+      font-size: 36px;
+      font-weight: 950;
+      text-shadow: 0 2px 0 rgba(17, 24, 39, 0.2);
+      box-shadow:
+        0 9px 0 var(--button-depth-main),
+        0 18px 26px rgba(159, 18, 57, 0.28),
+        inset 0 2px 0 var(--button-top-gloss),
+        inset 0 -5px 0 rgba(17, 24, 39, 0.12);
+      transform: translateY(-4px) perspective(500px) rotateX(7deg);
+      transform-style: preserve-3d;
+    }
+
+    .round-button.plus {
+      background:
+        radial-gradient(circle at 28% 18%, rgba(255, 255, 255, 0.74), transparent 23%),
+        var(--sub);
+      box-shadow:
+        0 9px 0 var(--button-depth-sub),
+        0 18px 26px rgba(15, 118, 110, 0.3),
+        inset 0 2px 0 var(--button-top-gloss),
+        inset 0 -5px 0 rgba(17, 24, 39, 0.12);
+    }
+
+    .round-button.next,
+    .primary-cta.next,
+    .primary-cta.vote,
+    .primary-cta.card {
+      background: var(--sub);
+      box-shadow:
+        0 9px 0 var(--button-depth-sub),
+        0 18px 30px rgba(15, 118, 110, 0.26),
+        inset 0 2px 0 var(--button-top-gloss),
+        inset 0 -5px 0 rgba(17, 24, 39, 0.12);
+    }
+
+    .primary-cta.start {
+      background: var(--party);
+      box-shadow:
+        0 9px 0 #c2410c,
+        0 18px 30px rgba(249, 115, 22, 0.24),
+        inset 0 2px 0 var(--button-top-gloss),
+        inset 0 -5px 0 rgba(17, 24, 39, 0.12);
+    }
+
+    .round-button::after {
+      content: "";
+      position: absolute;
+      inset: 8px 12px auto;
+      height: 16px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.32);
+      filter: blur(0.2px);
+      pointer-events: none;
+    }
+
+    .round-button::before {
+      content: "";
+      position: absolute;
+      inset: auto 12px 9px;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      pointer-events: none;
+    }
+
+    .count {
+      min-height: 62px;
+      border-radius: 20px;
+      display: grid;
+      place-items: center;
+      color: var(--ink);
+      background:
+        linear-gradient(180deg, rgba(17, 24, 39, 0.08), transparent 26%),
+        #fff7ed;
+      border: 2px solid #fed7aa;
+      font-size: 25px;
+      font-weight: 950;
+      box-shadow:
+        inset 0 4px 10px rgba(17, 24, 39, 0.1),
+        0 8px 18px rgba(17, 24, 39, 0.06);
+    }
+
+    .preset-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .preset {
+      position: relative;
+      height: 38px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: #f8fafc;
+      color: #334155;
+      font-size: 13px;
+      font-weight: 950;
+      border: 1px solid var(--line);
+      overflow: hidden;
+      box-shadow:
+        0 4px 0 #d6d3d1,
+        0 8px 14px rgba(17, 24, 39, 0.08);
+      transform: translateY(-2px);
+    }
+
+    .preset.active {
+      color: white;
+      background: var(--accent);
+      box-shadow:
+        0 4px 0 #b45309,
+        0 8px 16px rgba(245, 158, 11, 0.18),
+        inset 0 1px 0 var(--button-top-gloss);
+    }
+
+    .primary-cta {
+      position: relative;
+      min-height: 64px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      color: white;
+      background: var(--main);
+      box-shadow:
+        0 9px 0 var(--button-depth-main),
+        0 18px 30px rgba(159, 18, 57, 0.26),
+        inset 0 2px 0 var(--button-top-gloss),
+        inset 0 -5px 0 rgba(17, 24, 39, 0.12);
+      font-size: 19px;
+      font-weight: 950;
+      text-shadow: 0 2px 0 rgba(17, 24, 39, 0.18);
+      transform: translateY(-4px) perspective(620px) rotateX(4deg);
+      overflow: hidden;
+    }
+
+    .accordion-row {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      min-height: 50px;
+      padding: 0 16px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid var(--line);
+      color: #334155;
+      font-weight: 950;
+      overflow: hidden;
+      box-shadow:
+        0 6px 0 var(--button-depth-light),
+        0 12px 22px rgba(17, 24, 39, 0.08);
+      transform: translateY(-2px);
+    }
+
+    .pass-card {
+      margin-top: auto;
+      margin-bottom: auto;
+      padding: 22px;
+      border-radius: 26px;
+      background: white;
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      box-shadow: 0 22px 54px rgba(17, 24, 39, 0.14);
+      display: grid;
+      gap: 20px;
+      text-align: center;
+    }
+
+    .secret-card {
+      height: 264px;
+      border-radius: 24px;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 50% 34%, rgba(255, 255, 255, 0.9), transparent 32%),
+        linear-gradient(135deg, #0f766e, #172033 64%, #e11d48);
+      color: white;
+      box-shadow: 0 18px 40px rgba(15, 118, 110, 0.22);
+    }
+
+    .card-question {
+      width: 100px;
+      height: 100px;
+      border-radius: 30px;
+      display: grid;
+      place-items: center;
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      font-size: 52px;
+      font-weight: 950;
+    }
+
+    .pass-title {
+      font-size: 28px;
+      line-height: 1.12;
+      font-weight: 950;
+    }
+
+    .pass-help {
+      color: #64748b;
+      font-size: 15px;
+      line-height: 1.55;
+      font-weight: 800;
+    }
+
+    .vote-progress {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #dbeafe;
+      font-size: 13px;
+      font-weight: 950;
+    }
+
+    .vote-title {
+      color: white;
+      font-size: 30px;
+      line-height: 1.12;
+      font-weight: 950;
+    }
+
+    .candidate-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    .candidate {
+      min-height: 104px;
+      border-radius: 22px;
+      padding: 14px;
+      background:
+        radial-gradient(circle at 20% 16%, rgba(255, 255, 255, 0.9), transparent 22%),
+        rgba(255, 255, 255, 0.94);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow:
+        0 7px 0 rgba(148, 163, 184, 0.55),
+        0 16px 30px rgba(0, 0, 0, 0.13);
+      transform: perspective(700px) rotateX(3deg);
+    }
+
+    .candidate strong {
+      font-size: 24px;
+      font-weight: 950;
+    }
+
+    .candidate span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .candidate.selected {
+      color: white;
+      background:
+        radial-gradient(circle at 24% 18%, rgba(255, 255, 255, 0.28), transparent 24%),
+        var(--main);
+      border-color: rgba(255, 255, 255, 0.32);
+      box-shadow:
+        0 8px 0 #9f1239,
+        0 18px 34px rgba(225, 29, 72, 0.28),
+        inset 0 2px 0 rgba(255, 255, 255, 0.3);
+    }
+
+    .candidate.selected span {
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    .result-hero {
+      padding: 20px 18px;
+      border-radius: 28px;
+      background: white;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: 0 22px 54px rgba(0, 0, 0, 0.18);
+      text-align: center;
+      display: grid;
+      gap: 14px;
+    }
+
+    .liar-face {
+      width: 116px;
+      height: 116px;
+      margin: 0 auto;
+      position: relative;
+      border-radius: 38px;
+      background: linear-gradient(135deg, #fff7ed, #fed7aa);
+      box-shadow: inset 0 -10px 0 rgba(249, 115, 22, 0.12), 0 16px 28px rgba(249, 115, 22, 0.22);
+    }
+
+    .liar-face::before,
+    .liar-face::after {
+      content: "";
+      position: absolute;
+      top: 44px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #111827;
+    }
+
+    .liar-face::before {
+      left: 32px;
+    }
+
+    .liar-face::after {
+      right: 32px;
+    }
+
+    .nose {
+      position: absolute;
+      left: 56px;
+      top: 54px;
+      width: 58px;
+      height: 16px;
+      border-radius: 999px;
+      transform: rotate(-8deg);
+      background: var(--main);
+      box-shadow: 18px 2px 0 rgba(225, 29, 72, 0.22);
+    }
+
+    .result-title {
+      font-size: 38px;
+      line-height: 1.06;
+      font-weight: 950;
+      color: var(--ink);
+    }
+
+    .fact-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .fact {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      min-height: 44px;
+      padding: 0 14px;
+      border-radius: 14px;
+      background: #f8fafc;
+      color: #334155;
+      font-size: 13px;
+      font-weight: 950;
+    }
+
+    .fact b {
+      color: var(--ink);
+      font-size: 15px;
+    }
+
+    .recap-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .recap {
+      min-height: 74px;
+      border-radius: 18px;
+      padding: 12px;
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      display: grid;
+      align-content: center;
+      gap: 4px;
+    }
+
+    .role-note {
+      display: grid;
+      gap: 8px;
+      padding: 14px;
+      border-radius: 16px;
+      background: white;
+      border: 1px solid var(--line);
+    }
+
+    .role-note div {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: #475569;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .role-note b {
+      color: var(--ink);
+    }
+
+    .recap span {
+      color: #9a3412;
+      font-size: 11px;
+      font-weight: 950;
+    }
+
+    .recap b {
+      color: var(--ink);
+      font-size: 17px;
+      font-weight: 950;
+    }
+  </style>
+</head>
+<body>
+  <main class="board">
+    <header class="board-title">
+      <div>
+        <p class="eyebrow">LIAR GAME / BRIGHT PARTY MYSTERY</p>
+        <h1>예쁘고 깔끔하지만, 눌러보고 싶은 파티 미스터리</h1>
+        <p>너무 무거운 추리앱이 아니라 한 폰을 돌려 쓰는 모임 게임. 강한 CTA, 또렷한 대비, 짧은 드라마, 피노키오형 라이어 연출을 기준으로 잡았다.</p>
+      </div>
+      <span class="tag">390 x 844 mobile draft</span>
+    </header>
+
+    <section class="style-grid">
+      <div class="panel">
+        <h2 class="section-title">Color Roles</h2>
+        <div class="swatches">
+          <div class="swatch" style="background:#e11d48">Main<br><small>#E11D48 / 라이어·긴장·주요 CTA</small></div>
+          <div class="swatch" style="background:#0f766e">Sub<br><small>#0F766E / 시민·진행·안정</small></div>
+          <div class="swatch" style="background:#f59e0b">Accent<br><small>#F59E0B / 힌트·강조·리캡</small></div>
+          <div class="swatch" style="background:#f97316">Party<br><small>#F97316 / 버튼 열감·결과 축하</small></div>
+          <div class="swatch" style="background:#172033">Background<br><small>#172033 / 깊이·야간 모임감</small></div>
+          <div class="swatch" style="background:#fff7ed;color:#111827;box-shadow:inset 0 -26px 44px rgba(249,115,22,.12)">Surface<br><small style="color:#9a3412">#FFF7ED / 밝은 카드·모달</small></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2 class="section-title">Typography</h2>
+        <div class="type-stack">
+          <div class="type-sample"><div class="display">라이어 공개</div><p class="body-copy">Display / 38-44 / 950</p></div>
+          <div class="type-sample"><div class="headline">한 폰만 돌리면 바로 시작</div><p class="body-copy">Headline / 24-30 / 900</p></div>
+          <div class="type-sample"><p class="body-copy">안내문은 15px 이상, 흐린 파스텔 금지. 보조 문구도 충분한 대비를 유지한다.</p></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2 class="section-title">Components</h2>
+        <div class="component-stack">
+          <div class="btn btn-primary">진행 버튼</div>
+          <div class="btn btn-secondary">게임방법</div>
+          <div class="button-demo-row">
+            <div class="round-button">-</div>
+            <div class="round-button plus">+</div>
+          </div>
+          <div class="button-demo-row">
+            <div class="primary-cta start">빠른 시작</div>
+            <div class="primary-cta next">다음</div>
+          </div>
+          <div class="badge-row">
+            <span class="badge badge-main">라이어</span>
+            <span class="badge badge-sub">비밀투표</span>
+            <span class="badge badge-soft">힌트</span>
+          </div>
+          <div class="role-note">
+            <div><span>Red</span><b>라이어·위험·공개</b></div>
+            <div><span>Teal</span><b>진행·확인·저장</b></div>
+            <div><span>Orange</span><b>빠른 시작·파티감</b></div>
+            <div><span>Amber</span><b>선택·힌트·리캡</b></div>
+          </div>
+          <div class="mini-card">
+            <strong>카드 기준</strong>
+            <p class="body-copy">흰 표면, 또렷한 그림자, 18px 라운드. 정보는 짧고 크게.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2 class="section-title">React Bits Motion</h2>
+        <div class="motion-card">
+          <strong>3D Tilt<br>Magnet Pull<br>Glow Cards</strong>
+          <p>React Bits의 Magnet, 3D tilt card, shader/glow 감각을 라이어게임용으로 번역한다. 핵심 조작은 평평한 버튼이 아니라 누르는 게임 오브젝트처럼 보이게 한다.</p>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2 class="section-title">CSS Tokens Draft</h2>
+        <div class="token-box">--color-main: #e11d48;
+--color-sub: #0f766e;
+--color-accent: #f59e0b;
+--color-party: #f97316;
+--color-bg: #172033;
+--color-bg-deep: #111827;
+--color-surface: #fff7ed;
+--radius-card: 18px;
+--radius-control: 14px;
+--shadow-card: 0 18px 50px rgba(17,24,39,.18);
+--shadow-cta: 0 9px 0 var(--button-depth-main),
+  0 18px 30px rgba(159,18,57,.26);
+--button-depth-main: #9f1239;
+--button-depth-sub: #115e59;
+--button-depth-light: #d6d3d1;
+--press-depth: 9px;
+--motion-tilt: perspective(700px) rotateX(3deg);</div>
+      </div>
+    </section>
+
+    <section class="screens">
+      <article class="phone-wrap">
+        <h2 class="phone-title">1. 첫 화면</h2>
+        <p class="phone-note">Surface는 밝게, CTA는 단색 3D 버튼으로 강하게. 언어는 작게, 인원수와 시작이 첫 시야에 들어온다.</p>
+        <div class="phone">
+          <div class="phone-inner">
+            <div class="topbar"><span class="ghost-link">게임방법</span><span class="lang">한국어</span></div>
+            <div class="hero-lockup">
+              <p class="eyebrow">PASS PHONE PARTY</p>
+              <div class="hero-title">라이어<br>게임</div>
+              <p class="hero-sub">한 폰만 돌리면 바로 시작. 설명은 짧고, 결과는 크게 터집니다.</p>
+            </div>
+            <div class="player-card">
+              <span class="field-label">인원수</span>
+              <div class="stepper">
+                <div class="round-button">-</div>
+                <div class="count">6명</div>
+                <div class="round-button plus">+</div>
+              </div>
+              <div class="preset-row">
+                <div class="preset">3</div><div class="preset">4</div><div class="preset">5</div><div class="preset active">6</div><div class="preset">12</div>
+              </div>
+            </div>
+            <div class="primary-cta start">빠른 시작</div>
+            <div class="accordion-row"><span>이름 입력</span><span>펼치기</span></div>
+            <div class="accordion-row"><span>고급 설정</span><span>라이어 1명 · 3R</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="phone-wrap">
+        <h2 class="phone-title">2. 카드 확인 패스폰</h2>
+        <p class="phone-note">Dark background는 비밀감, Surface 카드는 안전한 확인 공간. Main은 라이어 긴장, Sub는 다음 진행.</p>
+        <div class="phone dark">
+          <div class="phone-inner">
+            <div class="vote-progress"><span>라운드 1</span><span>2 / 6 확인 완료</span></div>
+            <div>
+              <h3 class="vote-title">3번 차례입니다</h3>
+              <p class="phone-note">혼자 카드 확인을 누르세요. 옆 사람은 화면을 보지 않습니다.</p>
+            </div>
+            <div class="pass-card">
+              <div class="secret-card"><div class="card-question">?</div></div>
+              <div>
+                <div class="pass-title">카드 확인</div>
+                <p class="pass-help">확인 후 화면이 가려지고 다음 사람에게 넘깁니다.</p>
+              </div>
+              <div class="primary-cta card">3번 카드 보기</div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="phone-wrap">
+        <h2 class="phone-title">3. 비밀투표</h2>
+        <p class="phone-note">투표자는 크게, 후보는 카드로. 선택된 후보는 Main 단색 3D 버튼처럼 강하게 반응한다.</p>
+        <div class="phone dark">
+          <div class="phone-inner">
+            <div class="vote-progress"><span>비밀투표</span><span>3 / 6</span></div>
+            <div>
+              <h3 class="vote-title">민수님,<br>가장 의심스러운 사람은?</h3>
+              <p class="phone-note">선택 후 바로 화면을 가리고 다음 사람에게 넘깁니다.</p>
+            </div>
+            <div class="candidate-grid">
+              <div class="candidate"><strong>지연</strong><span>2번</span></div>
+              <div class="candidate selected"><strong>도윤</strong><span>3번 선택됨</span></div>
+              <div class="candidate"><strong>서아</strong><span>4번</span></div>
+              <div class="candidate"><strong>현우</strong><span>5번</span></div>
+            </div>
+            <div style="margin-top:auto" class="primary-cta vote">내 투표 저장</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="phone-wrap">
+        <h2 class="phone-title">4. 라이어 공개 / 결과</h2>
+        <p class="phone-note">투표 결과가 먼저, 라이어 공개는 캐릭터 이미지로. 리캡은 Accent Surface로 사람 중심 재미를 만든다.</p>
+        <div class="phone">
+          <div class="phone-inner">
+            <p class="eyebrow">1라운드 결과</p>
+            <div class="result-hero">
+              <div class="liar-face"><span class="nose"></span></div>
+              <div>
+                <p class="badge badge-main" style="display:inline-flex">라이어 공개</p>
+                <div class="result-title">도윤!</div>
+              </div>
+              <div class="fact-list">
+                <div class="fact"><span>투표 결과</span><b>도윤 · 4표</b></div>
+                <div class="fact"><span>판정</span><b>시민 승리</b></div>
+                <div class="fact"><span>제시어</span><b>피자 · 음식</b></div>
+              </div>
+            </div>
+            <div class="recap-row">
+              <div class="recap"><span>가장 의심받은 사람</span><b>도윤</b></div>
+              <div class="recap"><span>억울한 시민</span><b>없음</b></div>
+            </div>
+            <div class="primary-cta next">다음 라운드</div>
+          </div>
+        </div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

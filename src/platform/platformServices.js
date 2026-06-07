@@ -65,10 +65,16 @@ function createAdsService(target) {
   const kind = TARGET_DETAILS[target].ads;
   return {
     kind,
+    async preloadInterstitial(placementId) {
+      return { ...notConfigured(target, 'ads'), placementId };
+    },
     async showRewarded(placementId) {
       return { ...notConfigured(target, 'ads'), placementId };
     },
     async showInterstitial(placementId) {
+      return { ...notConfigured(target, 'ads'), placementId };
+    },
+    async requestBanner(placementId) {
       return { ...notConfigured(target, 'ads'), placementId };
     },
   };

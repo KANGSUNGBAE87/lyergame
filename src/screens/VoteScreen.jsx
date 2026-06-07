@@ -1,8 +1,11 @@
 import { useState } from 'react';
+import VoteResultBars from '../components/VoteResultBars.jsx';
 import { haptic } from '../core/haptic.js';
 import { useI18n } from '../i18n/I18nProvider.jsx';
 import { playerLabel, playerNameWithNumber } from '../logic/players.js';
+import { getNextVoteStep } from '../logic/voteFlow.js';
 import { buildVoteCounts, getSelectableCandidateIndices, getTopVotedIndices } from '../logic/voting.js';
+import { createVoteResultRows } from '../logic/voteResults.js';
 import { useGame } from '../store/gameStore.jsx';
 
 function createEmptyVotes(playerCount) {
@@ -21,7 +24,6 @@ export default function VoteScreen() {
     previousVotesByVoter: [],
   });
   const [currentVoter, setCurrentVoter] = useState(0);
-  const [handoffOpen, setHandoffOpen] = useState(false);
   const [tie, setTie] = useState(null);
   const selectedTarget = session.votesByVoter[currentVoter];
   const voterName = playerNameWithNumber(currentVoter, state.config.playerNames);
@@ -31,12 +33,11 @@ export default function VoteScreen() {
     runoffCandidates: session.candidates,
   });
 
-  const voteSummary = (counts, candidates) => candidates
-    .map(index => t('vote.patternItem', {
-      player: playerNameWithNumber(index, state.config.playerNames),
-      count: counts[index],
-    }))
-    .join(' · ');
+  const voteRows = (counts, candidates) => createVoteResultRows({
+    voteCounts: counts,
+    playerNames: state.config.playerNames,
+    candidateIndices: candidates,
+  });
 
   const dispatchVote = ({ votedOutIndices, voteCounts, votesByVoter, runoffOf = [], runoffVoteCounts = [], runoffVotesByVoter = [], usedQuickJudgment = false }) => {
     dispatch({
@@ -61,7 +62,6 @@ export default function VoteScreen() {
         voteCounts,
         votesByVoter,
       });
-      setHandoffOpen(false);
       return;
     }
 
@@ -86,16 +86,12 @@ export default function VoteScreen() {
   const confirmVote = () => {
     if (selectedTarget === null) return;
     haptic();
-    setHandoffOpen(true);
-  };
-
-  const continueAfterVote = () => {
-    if (currentVoter >= playerCount - 1) {
+    const nextStep = getNextVoteStep({ currentVoter, playerCount });
+    if (nextStep.type === 'count-votes') {
       finishSession(session.votesByVoter);
       return;
     }
-    setCurrentVoter(value => value + 1);
-    setHandoffOpen(false);
+    setCurrentVoter(nextStep.nextVoter);
   };
 
   const startRunoff = () => {
@@ -108,7 +104,6 @@ export default function VoteScreen() {
     });
     setCurrentVoter(0);
     setTie(null);
-    setHandoffOpen(false);
   };
 
   const quickJudge = () => {
@@ -126,33 +121,15 @@ export default function VoteScreen() {
         <p className="eyebrow">{t('vote.tie.eyebrow')}</p>
         <h2 className="section-title">{t('vote.tie.title')}</h2>
         <p className="hint">{t('vote.tie.help')}</p>
-        <div className="vote-pattern">
-          {voteSummary(tie.voteCounts, tie.candidates)}
-        </div>
+        <VoteResultBars
+          label={t('result.vote.label')}
+          rows={voteRows(tie.voteCounts, tie.candidates)}
+          countLabel={count => t('result.highlight.votes', { count })}
+          candidateLabel={t('result.vote.candidateBadge')}
+        />
         <div className="manual">
           <button className="primary-btn wide" type="button" onClick={startRunoff}>{t('vote.tie.revote')}</button>
           <button className="ghost-btn" type="button" onClick={quickJudge}>{t('vote.tie.quickJudge')}</button>
-        </div>
-      </div>
-    );
-  }
-
-  if (handoffOpen) {
-    const isLast = currentVoter >= playerCount - 1;
-
-    return (
-      <div className="screen handoff">
-        <div className="handoff-panel">
-          <p className="eyebrow">{t('vote.handoff.saved', { player: playerLabel(currentVoter, state.config.playerNames) })}</p>
-          <h2 className="section-title">{isLast ? t('vote.handoff.finishTitle') : t('vote.handoff.title')}</h2>
-          <p className="hint">
-            {isLast
-              ? t('vote.handoff.finishHelp')
-              : t('vote.handoff.next', { player: playerNameWithNumber(currentVoter + 1, state.config.playerNames) })}
-          </p>
-          <button className="primary-btn wide" type="button" onClick={continueAfterVote}>
-            {isLast ? t('vote.handoff.finishButton') : t('vote.handoff.nextButton')}
-          </button>
         </div>
       </div>
     );
@@ -162,13 +139,22 @@ export default function VoteScreen() {
     <div className="screen vote">
       <p className="eyebrow">{session.isRunoff ? t('vote.runoff.eyebrow') : t('vote.eyebrow', { current: currentVoter + 1, total: playerCount })}</p>
       <h2 className="section-title">{session.isRunoff ? t('vote.runoff.title') : t('vote.title')}</h2>
-      <p className="hint">
+      <div className="turn-instruction-card vote-instruction-card">
+        <span>{session.isRunoff ? t('vote.runoff.instructionBadge') : t('vote.instructionBadge')}</span>
+        <p>
         {session.isRunoff
           ? t('vote.runoff.help', { player: voterName })
           : t('vote.secretHelp', { player: voterName })}
-      </p>
+        </p>
+      </div>
       {session.isRunoff ? (
-        <div className="vote-pattern">{voteSummary(session.previousVoteCounts, session.candidates)}</div>
+        <VoteResultBars
+          label={t('result.vote.label')}
+          rows={voteRows(session.previousVoteCounts, session.candidates)}
+          countLabel={count => t('result.highlight.votes', { count })}
+          candidateLabel={t('result.vote.candidateBadge')}
+          compact
+        />
       ) : null}
       <div className="vote-choice-grid">
         {choices.map(index => (

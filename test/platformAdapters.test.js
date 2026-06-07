@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { AD_PLACEMENTS } from '../src/ads/adPlacements.js';
 import { adsProvider } from '../src/ads/adsProvider.js';
 import { authProvider } from '../src/auth/authProvider.js';
 import { paymentProvider, PRODUCTS } from '../src/payments/paymentProvider.js';
@@ -23,6 +24,8 @@ describe('platform adapter stubs', () => {
 
   it('keeps ads behind an adapter stub', async () => {
     await expect(adsProvider.showRewarded('round_bonus')).resolves.toMatchObject({ ok: false, reason: 'not-configured' });
+    await expect(adsProvider.preloadInterstitial(AD_PLACEMENTS.POST_GAME_INTERSTITIAL)).resolves.toMatchObject({ ok: false, reason: 'not-configured' });
+    await expect(adsProvider.requestBanner(AD_PLACEMENTS.HISTORY_BANNER)).resolves.toMatchObject({ ok: false, reason: 'not-configured' });
   });
 
   it('creates platform-specific service bundles through one boundary', () => {

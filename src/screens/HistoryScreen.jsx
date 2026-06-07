@@ -1,4 +1,8 @@
 import { useEffect, useState } from 'react';
+import { AD_PLACEMENTS } from '../ads/adPlacements.js';
+import { authProvider } from '../auth/authProvider.js';
+import AdBannerSlot from '../components/AdBannerSlot.jsx';
+import LoginPrompt from '../components/LoginPrompt.jsx';
 import { useI18n } from '../i18n/I18nProvider.jsx';
 import { recordsRepository } from '../records/recordsRepository.js';
 import { useGame } from '../store/gameStore.jsx';
@@ -36,7 +40,19 @@ export default function HistoryScreen() {
           ))}
         </div>
       ) : null}
-      <div className="login-note">{t('history.loginNote')}</div>
+      <LoginPrompt
+        compact
+        eyebrow={t('auth.history.eyebrow')}
+        title={t('auth.history.title')}
+        body={t('auth.history.body')}
+        ctaLabel={t('auth.login')}
+        statusText={t('auth.notReady')}
+        onLogin={() => authProvider.login()}
+      />
+      <AdBannerSlot
+        placementId={AD_PLACEMENTS.HISTORY_BANNER}
+        label={t('ads.historyBanner.label')}
+      />
       <button className="ghost-btn" type="button" onClick={() => dispatch({ type: 'GO', phase: backPhase })}>{t('common.back')}</button>
     </div>
   );
