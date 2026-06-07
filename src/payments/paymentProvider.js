@@ -1,4 +1,5 @@
 import { createPlatformServices } from '../platform/platformServices.js';
+import { getRuntimePlatformTarget } from '../platform/runtimeConfig.js';
 
 export const PRODUCTS = [
   {
@@ -8,7 +9,7 @@ export const PRODUCTS = [
   },
 ];
 
-export const paymentProvider = createPlatformServices('web').payments;
+export const paymentProvider = createPlatformServices(getRuntimePlatformTarget()).payments;
 
 export function createPaymentProvider(target) {
   return createPlatformServices(target).payments;

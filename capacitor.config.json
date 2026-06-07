@@ -1,0 +1,9 @@
+{
+  "appId": "com.kangsungbae.liargame",
+  "appName": "라이어 게임",
+  "webDir": "dist",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https"
+  }
+}

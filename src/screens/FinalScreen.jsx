@@ -8,6 +8,7 @@ import Scoreboard from '../components/Scoreboard.jsx';
 import { useI18n } from '../i18n/I18nProvider.jsx';
 import { deriveFinalRecap } from '../logic/highlights.js';
 import { playerNameWithNumber } from '../logic/players.js';
+import { isAdSlotEnabled, isAuthPromptEnabled } from '../platform/runtimeConfig.js';
 import { saveGameRecord, useGame } from '../store/gameStore.jsx';
 
 function formatPlayers(indices = [], playerNames = []) {
@@ -21,6 +22,8 @@ export default function FinalScreen() {
   const maxScore = Math.max(...state.scores);
   const recap = deriveFinalRecap({ scores: state.scores, perRound: state.perRound });
   const winners = formatPlayers(recap.winners.indices, state.config.playerNames);
+  const authPromptsEnabled = isAuthPromptEnabled();
+  const adSlotsEnabled = isAdSlotEnabled();
 
   useEffect(() => {
     if (!saved.current) {
@@ -30,10 +33,17 @@ export default function FinalScreen() {
   }, [state]);
 
   useEffect(() => {
+    if (!adSlotsEnabled) return;
+
     void preloadInterstitial(adsProvider, AD_PLACEMENTS.POST_GAME_INTERSTITIAL);
-  }, []);
+  }, [adSlotsEnabled]);
 
   const runPostGameAction = action => {
+    if (!adSlotsEnabled) {
+      dispatch(action);
+      return;
+    }
+
     void runAfterInterstitial({
       ads: adsProvider,
       placementId: AD_PLACEMENTS.POST_GAME_INTERSTITIAL,
@@ -76,15 +86,17 @@ export default function FinalScreen() {
         ) : null}
       </div>
       <Scoreboard scores={state.scores} playerNames={state.config.playerNames} />
-      <LoginPrompt
-        compact
-        eyebrow={t('auth.final.eyebrow')}
-        title={t('auth.final.title')}
-        body={t('auth.final.body')}
-        ctaLabel={t('auth.login')}
-        statusText={t('auth.notReady')}
-        onLogin={() => authProvider.login()}
-      />
+      {authPromptsEnabled ? (
+        <LoginPrompt
+          compact
+          eyebrow={t('auth.final.eyebrow')}
+          title={t('auth.final.title')}
+          body={t('auth.final.body')}
+          ctaLabel={t('auth.login')}
+          statusText={t('auth.notReady')}
+          onLogin={() => authProvider.login()}
+        />
+      ) : null}
       <button className="primary-btn wide" type="button" onClick={() => runPostGameAction({ type: 'RESTART_SAME' })}>{t('final.sameGame')}</button>
       <button className="ghost-btn" type="button" onClick={() => runPostGameAction({ type: 'RESET' })}>{t('final.newGame')}</button>
       <button className="ghost-btn" type="button" onClick={() => dispatch({ type: 'GO', phase: 'history' })}>{t('final.history')}</button>

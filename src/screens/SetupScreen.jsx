@@ -8,6 +8,7 @@ import { CATEGORIES } from '../data/words.js';
 import { useI18n } from '../i18n/I18nProvider.jsx';
 import { LOCALES } from '../i18n/messages.js';
 import { buildPlayerNames, setPlayerName } from '../logic/players.js';
+import { isAuthPromptEnabled } from '../platform/runtimeConfig.js';
 import { useGame } from '../store/gameStore.jsx';
 
 const DEFAULT_SETUP_CONFIG = {
@@ -28,6 +29,7 @@ export default function SetupScreen() {
   const [guideOpen, setGuideOpen] = useState(false);
   const [accountNotice, setAccountNotice] = useState('');
   const [config, setConfig] = useState(DEFAULT_SETUP_CONFIG);
+  const authPromptsEnabled = isAuthPromptEnabled();
 
   const set = (key, value) => setConfig(prev => ({ ...prev, [key]: value }));
   const setPlayerCount = playerCount => setConfig(prev => ({
@@ -71,6 +73,8 @@ export default function SetupScreen() {
     },
   });
   const requestLogin = async () => {
+    if (!authPromptsEnabled) return;
+
     const result = await authProvider.login();
     if (!result?.ok) {
       setAccountNotice(t('auth.notReady'));
@@ -114,9 +118,11 @@ export default function SetupScreen() {
   return (
     <div className="screen setup">
       <div className="setup-topbar">
-        <button className="account-trigger" type="button" onClick={requestLogin}>
-          {t('auth.account')}
-        </button>
+        {authPromptsEnabled ? (
+          <button className="account-trigger" type="button" onClick={requestLogin}>
+            {t('auth.account')}
+          </button>
+        ) : <span />}
         <div className="locale-menu">
           <button
             className="locale-trigger"
@@ -145,7 +151,7 @@ export default function SetupScreen() {
         <h1 className="title">{t('app.title')}</h1>
         <p className="subtitle">{t('app.subtitle')}</p>
       </div>
-      {accountNotice ? <p className="account-inline-notice" role="status">{accountNotice}</p> : null}
+      {authPromptsEnabled && accountNotice ? <p className="account-inline-notice" role="status">{accountNotice}</p> : null}
 
       <GuideDialog
         open={guideOpen}

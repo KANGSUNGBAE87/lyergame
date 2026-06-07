@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Liar Game app icon draft">
+  <rect width="512" height="512" rx="112" fill="#172033"/>
+  <path d="M0 392 512 270v242H0Z" fill="#0F766E"/>
+  <path d="M0 0h218L0 218Z" fill="#E11D48"/>
+  <path d="M512 0v196L318 0Z" fill="#F97316"/>
+  <path d="m256 56 34 109 108-52-54 106 121 37-121 37 54 106-108-52-34 109-34-109-108 52 54-106-121-37 121-37-54-106 108 52Z" fill="#F59E0B"/>
+  <circle cx="256" cy="256" r="122" fill="#FFF7ED"/>
+  <circle cx="203" cy="245" r="20" fill="#172033"/>
+  <circle cx="309" cy="245" r="20" fill="#172033"/>
+  <path d="M238 301c28 28 68 28 96 0" fill="none" stroke="#172033" stroke-width="20" stroke-linecap="round"/>
+  <path d="m328 258 112 24" fill="none" stroke="#E11D48" stroke-width="22" stroke-linecap="round"/>
+</svg>

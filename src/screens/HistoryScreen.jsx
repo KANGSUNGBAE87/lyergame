@@ -4,6 +4,7 @@ import { authProvider } from '../auth/authProvider.js';
 import AdBannerSlot from '../components/AdBannerSlot.jsx';
 import LoginPrompt from '../components/LoginPrompt.jsx';
 import { useI18n } from '../i18n/I18nProvider.jsx';
+import { isAdSlotEnabled, isAuthPromptEnabled } from '../platform/runtimeConfig.js';
 import { recordsRepository } from '../records/recordsRepository.js';
 import { useGame } from '../store/gameStore.jsx';
 
@@ -13,6 +14,8 @@ export default function HistoryScreen() {
   const [games, setGames] = useState(null);
   const backPhase = state.prevFrom && state.prevFrom !== 'history' ? state.prevFrom : 'setup';
   const dateLocale = locale === 'ko' ? 'ko-KR' : 'en-US';
+  const authPromptsEnabled = isAuthPromptEnabled();
+  const adSlotsEnabled = isAdSlotEnabled();
 
   useEffect(() => {
     recordsRepository.listGames().then(setGames);
@@ -40,19 +43,23 @@ export default function HistoryScreen() {
           ))}
         </div>
       ) : null}
-      <LoginPrompt
-        compact
-        eyebrow={t('auth.history.eyebrow')}
-        title={t('auth.history.title')}
-        body={t('auth.history.body')}
-        ctaLabel={t('auth.login')}
-        statusText={t('auth.notReady')}
-        onLogin={() => authProvider.login()}
-      />
-      <AdBannerSlot
-        placementId={AD_PLACEMENTS.HISTORY_BANNER}
-        label={t('ads.historyBanner.label')}
-      />
+      {authPromptsEnabled ? (
+        <LoginPrompt
+          compact
+          eyebrow={t('auth.history.eyebrow')}
+          title={t('auth.history.title')}
+          body={t('auth.history.body')}
+          ctaLabel={t('auth.login')}
+          statusText={t('auth.notReady')}
+          onLogin={() => authProvider.login()}
+        />
+      ) : null}
+      {adSlotsEnabled ? (
+        <AdBannerSlot
+          placementId={AD_PLACEMENTS.HISTORY_BANNER}
+          label={t('ads.historyBanner.label')}
+        />
+      ) : null}
       <button className="ghost-btn" type="button" onClick={() => dispatch({ type: 'GO', phase: backPhase })}>{t('common.back')}</button>
     </div>
   );

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="500" viewBox="0 0 1024 500" role="img" aria-label="Liar Game feature graphic draft">
+  <rect width="1024" height="500" fill="#172033"/>
+  <path d="M0 380 1024 214v286H0Z" fill="#0F766E"/>
+  <path d="M0 0h430L0 258Z" fill="#E11D48"/>
+  <path d="M1024 0v205L765 0Z" fill="#F97316"/>
+  <g transform="translate(92 82)">
+    <rect x="0" y="0" width="226" height="316" rx="38" fill="#FFF7ED"/>
+    <text x="113" y="86" text-anchor="middle" font-family="Pretendard, Arial, sans-serif" font-size="34" font-weight="900" fill="#172033">PASS</text>
+    <text x="113" y="138" text-anchor="middle" font-family="Pretendard, Arial, sans-serif" font-size="34" font-weight="900" fill="#172033">PHONE</text>
+    <circle cx="113" cy="224" r="58" fill="#F59E0B"/>
+    <path d="M113 178 127 213 165 207 137 233 149 270 113 250 77 270 89 233 61 207 99 213Z" fill="#E11D48"/>
+  </g>
+  <text x="382" y="172" font-family="Pretendard, Arial, sans-serif" font-size="76" font-weight="900" fill="#FFF7ED">라이어 게임</text>
+  <text x="386" y="240" font-family="Pretendard, Arial, sans-serif" font-size="32" font-weight="800" fill="#F59E0B">휴대폰 하나로 바로 시작</text>
+  <text x="386" y="318" font-family="Pretendard, Arial, sans-serif" font-size="28" font-weight="700" fill="#DFFCF5">빠른 시작 · 비밀투표 · 라이어 공개 · 결과 리캡</text>
+</svg>
